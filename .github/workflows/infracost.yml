@@ -27,7 +27,7 @@ jobs:
 
       - name: Generate Infracost cost estimate baseline
         run: |
-          infracost breakdown --config-file .github/infracost.yml \
+          infracost breakdown --config-file=infracost.yml \
                               --format=json \
                               --out-file=/tmp/infracost-base.json
 
@@ -36,14 +36,14 @@ jobs:
 
       - name: Generate Infracost diff
         run: |
-          infracost diff --config-file .github/infracost.yml \
+          infracost diff --config-file=infracost.yml \
                          --format=json \
                          --compare-to=/tmp/infracost-base.json \
                          --out-file=/tmp/infracost.json
 
       - name: Post Infracost comment
         run: |
-            infracost comment github --config-file .github/infracost.yml \
+            infracost comment github --config-file=infracost.yml \
                                      --repo=$GITHUB_REPOSITORY \
                                      --github-token=${{github.token}} \
                                      --pull-request=${{github.event.pull_request.number}} \
