@@ -25,12 +25,14 @@ runs:
   - name: Terraform version
     working-directory: ./terraform/${{ inputs.workspace }}
     id: version
+    shell: bash
     run: terraform --version
     continue-on-error: false
 
   - name: Terraform fmt
     working-directory: ./terraform/${{ inputs.workspace }}
     id: fmt
+    shell: bash
     run: terraform fmt -recursive -check -diff
     continue-on-error: false
 
@@ -45,6 +47,7 @@ runs:
   - name: Terraform init
     working-directory: ./terraform/${{ inputs.workspace }}
     id: init
+    shell: bash
     run: terraform init -backend-config=tfvars/${{ inputs.environment }}.backend.tfvars
     continue-on-error: false
 
@@ -53,4 +56,5 @@ runs:
     id: plan
     env:
       TF_WORKSPACE: default
+    shell: bash
     run: terraform plan -input=false -var-file=tfvars/${{ inputs.environment }}.tfvars
