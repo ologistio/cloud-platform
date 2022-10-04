@@ -10,15 +10,15 @@ jobs:
     name: Terraform Plans
     steps:
     - uses: actions/checkout@v2
-    - uses: .github/actions/terraform-plan
+    - uses: ./.github/actions/terraform-plan
       with:
         workspace: ologist-aws-org-root
         environment: root
-    - uses: .github/actions/terraform-plan
+    - uses: ./.github/actions/terraform-plan
       with:
         workspace: ologist-aws-infra/global
         environment: root
-    - uses: .github/actions/terraform-plan
+    - uses: ./.github/actions/terraform-plan
       with:
         workspace: ologist-aws-id/global
 
@@ -26,4 +26,4 @@ jobs:
     name: Cost Estimate
     steps:
     - uses: actions/checkout@v2
-    - uses: .github/actions/terraform-infracost
+    - uses: ./.github/actions/terraform-infracost
