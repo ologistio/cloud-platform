@@ -1,0 +1,12 @@
+version: 0.1
+
+projects:
+  - path: terraform/ologist-aws-org-root
+    terraform_var_files:
+      - tfvars/root.tfvars
+  - path: terraform/ologist-aws-id/global
+    terraform_var_files:
+      - tfvars/root.tfvars
+  - path: terraform/ologist-aws-infra/global
+    terraform_var_files:
+      - tfvars/root.tfvars

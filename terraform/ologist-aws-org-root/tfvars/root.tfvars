@@ -1,0 +1,5 @@
+logging_bucket   = "ologist-aws-org-root-logs"
+org_email_alias  = "cloud-platform+aws-org-root"
+org_email_domain = "ologist.io"
+org_name         = "ologist"
+region           = "eu-west-1"
