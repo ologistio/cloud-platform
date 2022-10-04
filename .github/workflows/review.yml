@@ -11,20 +11,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+
     - name: AWS Org Root
       uses: ./.github/actions/terraform-plan
       with:
+        account: ${{ secrets.aws_org_root__aws_account_id}}
         workspace: ologist-aws-org-root
         environment: root
-    - name: AWS Infra (Global)
-      uses: ./.github/actions/terraform-plan
-      with:
-        workspace: ologist-aws-infra/global
-        environment: root
-    - name: AWS ID (Global)
-      uses: ./.github/actions/terraform-plan
-      with:
-        workspace: ologist-aws-id/global
+
+    # - name: AWS Infra (Global)
+    #   uses: ./.github/actions/terraform-plan
+    #   with:
+    #     account: ${{ secrets.aws_infra__aws_account_id}}
+    #     workspace: ologist-aws-infra/global
+    #     environment: root
+
+    # - name: AWS ID (Global)
+    #   uses: ./.github/actions/terraform-plan
+    #   with:
+    #     account: ${{ secrets.aws_id__aws_account_id}}
+    #     workspace: ologist-aws-id/global
+    #     environment: root
 
   terraform_infracost:
     name: Cost Estimate
