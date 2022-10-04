@@ -1,4 +1,4 @@
-name: ${{ inputs.workspace }}
+name: Plan
 description: "Create a Terraform Plan"
 inputs:
    workspace:
