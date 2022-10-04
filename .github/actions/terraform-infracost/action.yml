@@ -41,8 +41,7 @@ runs:
   - name: Post Infracost comment
     shell: bash
     run: |
-        infracost comment github --config-file=.github/infracost.yml \
-                                  --repo=$GITHUB_REPOSITORY \
+        infracost comment github --repo=$GITHUB_REPOSITORY \
                                   --github-token=${{github.token}} \
                                   --pull-request=${{github.event.pull_request.number}} \
                                   --behavior=update
