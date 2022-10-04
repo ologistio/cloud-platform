@@ -19,7 +19,7 @@ resource "aws_organizations_organization" "main" {
 # organization-wide policies easily.
 resource "aws_organizations_organizational_unit" "main" {
   name      = var.org_name
-  parent_id = aws_organizations_organization.main.roots.0.id
+  parent_id = aws_organizations_organization.main.roots[0].id
 }
 
 #
@@ -30,7 +30,7 @@ resource "aws_organizations_organizational_unit" "main" {
 # should not contain any actual resources (like GovCloud placeholders).
 resource "aws_organizations_organizational_unit" "suspended" {
   name      = "suspended"
-  parent_id = aws_organizations_organization.main.roots.0.id
+  parent_id = aws_organizations_organization.main.roots[0].id
 }
 
 # The org-scp module lets us add some common SCPs to our organization;

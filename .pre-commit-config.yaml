@@ -58,6 +58,4 @@ repos:
       - id: terraform_docs
       - id: terraform_fmt
       - id: terraform_checkov
-      - id: terraform_tflint
       - id: terraform_validate
-      - id: infracost_breakdown
