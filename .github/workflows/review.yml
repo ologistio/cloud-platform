@@ -1,0 +1,29 @@
+name: Review
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  terraform_plan:
+    name: Terraform Plans
+    steps:
+    - use: actions/checkout@v2
+    - uses: .github/actions/terraform-plan
+      with:
+        workspace: ologist-aws-org-root
+        environment: root
+    - uses: .github/actions/terraform-plan
+      with:
+        workspace: ologist-aws-infra/global
+        environment: root
+    - uses: .github/actions/terraform-plan
+      with:
+        workspace: ologist-aws-id/global
+
+  terraform_infracost:
+    name: Cost Estimate
+    steps:
+    - use: actions/checkout@v2
+    - uses: .github/actions/terraform-infracost

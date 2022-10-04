@@ -1,0 +1,56 @@
+name: ${{ inputs.workspace }}
+description: "Create a Terraform Plan"
+inputs:
+   workspace:
+     required: true
+     description: "The directory containing the Terraform code to plan"
+   environment:
+     required: true
+     description: "The environment tfvar file to use for the plan"
+   region:
+     required: false
+     default: "eu-west-1"
+     description: "The region to run this plan against"
+runs:
+  using: "composite"
+  steps:
+  - name: Checkout
+    uses: actions/checkout@v3
+
+  - name: Setup Terraform
+    uses: hashicorp/setup-terraform@v1
+    with:
+      terraform_version: 1.3.1
+
+  - name: Terraform version
+    working-directory: ./terraform/${{ inputs.workspace }}
+    id: version
+    run: terraform --version
+    continue-on-error: false
+
+  - name: Terraform fmt
+    working-directory: ./terraform/${{ inputs.workspace }}
+    id: fmt
+    run: terraform fmt -recursive -check -diff
+    continue-on-error: false
+
+  - name: Configure AWS credentials
+    uses: aws-actions/configure-aws-credentials@v1
+    with:
+      role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/ci
+      role-skip-session-tagging: true
+      role-duration-seconds: 3600
+      aws-region: ${{ inputs.aws-region }}
+
+  - name: Terraform init
+    working-directory: ./terraform/${{ inputs.workspace }}
+    id: init
+    run: terraform init -backend-config=tfvars/${{ inputs.environment }}.backend.tfvars
+    continue-on-error: false
+
+  - name: Terraform plan
+    working-directory: ./terraform/${{ inputs.workspace }}
+    id: plan
+    env:
+      TF_WORKSPACE: default
+    run: terraform plan -input=false -var-file=tfvars/${{ inputs.environment }}.tfvars
