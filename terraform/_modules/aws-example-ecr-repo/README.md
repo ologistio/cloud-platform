@@ -27,7 +27,7 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| aws | n/a |
+| aws | 4.33.0 |
 
 ## Modules
 
