@@ -10,6 +10,12 @@ inputs:
    account:
      description: "AWS account to run this plan against"
      required: true
+   aws_access_key:
+     description: "AWS Access Key"
+     required: true
+   aws_secret_key:
+     description: "AWS Secret Key"
+     required: true
    region:
      required: false
      default: "eu-west-1"
@@ -42,9 +48,8 @@ runs:
   - name: Configure AWS credentials
     uses: aws-actions/configure-aws-credentials@v1
     with:
-      role-to-assume: arn:aws:iam::${{ inputs.account }}:role/ci
-      role-skip-session-tagging: true
-      role-duration-seconds: 3600
+      aws-access-key-id: ${{ inputs.aws_access_key }}
+      aws-secret-access-key: ${{ inputs.aws_secret_key }}
       aws-region: ${{ inputs.aws-region }}
 
   - name: Terraform init

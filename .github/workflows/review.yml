@@ -15,9 +15,11 @@ jobs:
     - name: AWS Org Root
       uses: ./.github/actions/terraform-plan
       with:
-        account: ${{ secrets.aws_org_root__aws_account_id}}
+        account: ${{ secrets.AWS_ORG_ROOT__AWS_ACCOUNT_ID }}
         workspace: ologist-aws-org-root
         environment: root
+        aws_access_key: ${{ secrets.AWS_ORG_ROOT__AWS_ACCESS_KEY }}
+        aws_secret_key: ${{ secrets.AWS_ORG_ROOT__AWS_SECRET_KEY }}
 
     # - name: AWS Infra (Global)
     #   uses: ./.github/actions/terraform-plan
