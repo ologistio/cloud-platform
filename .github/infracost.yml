@@ -3,4 +3,4 @@ version: 0.1
 projects:
   - path: terraform/ologist-aws-org-root
     terraform_var_files:
-      - terraform/ologist-aws-org-root/tfvars/root.tfvars
+      - tfvars/root.tfvars
