@@ -59,16 +59,6 @@ runs:
     run: terraform init -backend-config=tfvars/${{ inputs.environment }}.backend.tfvars
     continue-on-error: false
 
-  - name: Terraform plan
-    working-directory: ./terraform/${{ inputs.workspace }}
-    id: plan
-    env:
-      TF_WORKSPACE: default
-    shell: bash
-    continue-on-error: true
-    run: |
-      tfcmt -owner "$OWNER" -repo "$REPO" -pr "$PR_NUMBER" plan -- terraform plan -lock=false -input=false -var-file=tfvars/${{ inputs.environment }}.tfvars -no-color
-
   - name: Plan Terraform
     id: plan
     continue-on-error: true
