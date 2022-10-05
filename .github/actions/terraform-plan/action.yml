@@ -67,8 +67,8 @@ runs:
     shell: bash
     continue-on-error: true
     run: |
-      terraform plan -lock=false -input=false -var-file=tfvars/${{ inputs.environment }}.tfvars -no-color | grep -v "Refreshing state" | sed -E 's/^([[:space:]]+)([-+])/\2\1/g' > out
-      cat out
+      PLAN=$(terraform plan -lock=false -input=false -var-file=tfvars/${{ inputs.environment }}.tfvars -no-color | grep -v "Refreshing state" | sed -E 's/^([[:space:]]+)([-+])/\2\1/g')
+      cat $PLAN
 
   - name: Post Plan to GitHub PR
     uses: mshick/add-pr-comment@v1
