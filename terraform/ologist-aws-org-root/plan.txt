@@ -1,0 +1,1883 @@
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
++   create
+ <= read (data resources)
+
+Terraform will perform the following actions:
+
+  # aws_guardduty_organization_admin_account.main will be created
++   resource "aws_guardduty_organization_admin_account" "main" {
++       admin_account_id = (known after apply)
++       id               = (known after apply)
+    }
+
+  # aws_iam_policy.limited_billing_access will be created
++   resource "aws_iam_policy" "limited_billing_access" {
++       arn         = (known after apply)
++       description = "Allows limited billing access"
++       id          = (known after apply)
++       name        = "limited-billing-access"
++       path        = "/"
++       policy      = jsonencode(
+            {
++               Statement = [
++                   {
++                       Action   = [
++                           "pricing:*",
++                           "ce:View*",
++                           "budgets:ViewBudget",
++                           "aws-portal:ViewUsage",
++                           "aws-portal:ViewBilling",
+                        ]
++                       Effect   = "Allow"
++                       Resource = "*"
++                       Sid      = "AllowAccessToBudgetsAndCostExplorer"
+                    },
++                   {
++                       Action   = [
++                           "aws-portal:*PaymentMethods",
++                           "aws-portal:*Account",
+                        ]
++                       Effect   = "Deny"
++                       Resource = "*"
++                       Sid      = "DenyAccessToAccountAndPaymentMethod"
+                    },
+                ]
++               Version   = "2012-10-17"
+            }
+        )
++       policy_id   = (known after apply)
++       tags_all    = (known after apply)
+    }
+
+  # aws_iam_role.admin will be created
++   resource "aws_iam_role" "admin" {
++       arn                   = (known after apply)
++       assume_role_policy    = jsonencode(
+            {
++               Statement = [
++                   {
++                       Action    = "sts:AssumeRole"
++                       Condition = {
++                           Bool = {
++                               "aws:MultiFactorAuthPresent" = "true"
+                            }
+                        }
++                       Effect    = "Allow"
++                       Principal = {
++                           AWS = "165133900345"
+                        }
++                       Sid       = ""
+                    },
+                ]
++               Version   = "2012-10-17"
+            }
+        )
++       create_date           = (known after apply)
++       description           = "Role for organization administrators"
++       force_detach_policies = false
++       id                    = (known after apply)
++       managed_policy_arns   = (known after apply)
++       max_session_duration  = 3600
++       name                  = "admin"
++       name_prefix           = (known after apply)
++       path                  = "/"
++       tags                  = {
++           "Automation" = "Terraform"
+        }
++       tags_all              = {
++           "Automation" = "Terraform"
+        }
++       unique_id             = (known after apply)
+
++       inline_policy {
++           name   = (known after apply)
++           policy = (known after apply)
+        }
+    }
+
+  # aws_iam_role_policy_attachment.admin_administrator_access will be created
++   resource "aws_iam_role_policy_attachment" "admin_administrator_access" {
++       id         = (known after apply)
++       policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
++       role       = "admin"
+    }
+
+  # aws_iam_user.admins["alice.org-root"] will be created
++   resource "aws_iam_user" "admins" {
++       arn           = (known after apply)
++       force_destroy = true
++       id            = (known after apply)
++       name          = "alice.org-root"
++       path          = "/"
++       tags          = {
++           "Automation" = "Terraform"
+        }
++       tags_all      = {
++           "Automation" = "Terraform"
+        }
++       unique_id     = (known after apply)
+    }
+
+  # aws_iam_user.admins["bob.org-root"] will be created
++   resource "aws_iam_user" "admins" {
++       arn           = (known after apply)
++       force_destroy = true
++       id            = (known after apply)
++       name          = "bob.org-root"
++       path          = "/"
++       tags          = {
++           "Automation" = "Terraform"
+        }
++       tags_all      = {
++           "Automation" = "Terraform"
+        }
++       unique_id     = (known after apply)
+    }
+
+  # aws_organizations_account.ologist_id will be created
++   resource "aws_organizations_account" "ologist_id" {
++       arn                        = (known after apply)
++       email                      = "cloud-platform+aws-org-root+id@ologist.io"
++       iam_user_access_to_billing = "ALLOW"
++       id                         = (known after apply)
++       joined_method              = (known after apply)
++       joined_timestamp           = (known after apply)
++       name                       = "ologist-id"
++       parent_id                  = (known after apply)
++       status                     = (known after apply)
++       tags                       = {
++           "Automation" = "Terraform"
+        }
++       tags_all                   = {
++           "Automation" = "Terraform"
+        }
+    }
+
+  # aws_organizations_account.ologist_infra will be created
++   resource "aws_organizations_account" "ologist_infra" {
++       arn                        = (known after apply)
++       email                      = "cloud-platform+aws-org-root+infra@ologist.io"
++       iam_user_access_to_billing = "DENY"
++       id                         = (known after apply)
++       joined_method              = (known after apply)
++       joined_timestamp           = (known after apply)
++       name                       = "ologist-infra"
++       parent_id                  = (known after apply)
++       status                     = (known after apply)
++       tags                       = {
++           "Automation" = "Terraform"
+        }
++       tags_all                   = {
++           "Automation" = "Terraform"
+        }
+    }
+
+  # aws_organizations_organization.main will be created
++   resource "aws_organizations_organization" "main" {
++       accounts                      = (known after apply)
++       arn                           = (known after apply)
++       aws_service_access_principals = [
++           "cloudtrail.amazonaws.com",
++           "config.amazonaws.com",
+        ]
++       feature_set                   = "ALL"
++       id                            = (known after apply)
++       master_account_arn            = (known after apply)
++       master_account_email          = (known after apply)
++       master_account_id             = (known after apply)
++       non_master_accounts           = (known after apply)
++       roots                         = (known after apply)
+    }
+
+  # aws_organizations_organizational_unit.main will be created
++   resource "aws_organizations_organizational_unit" "main" {
++       accounts  = (known after apply)
++       arn       = (known after apply)
++       id        = (known after apply)
++       name      = "ologist"
++       parent_id = (known after apply)
++       tags_all  = (known after apply)
+    }
+
+  # aws_organizations_organizational_unit.suspended will be created
++   resource "aws_organizations_organizational_unit" "suspended" {
++       accounts  = (known after apply)
++       arn       = (known after apply)
++       id        = (known after apply)
++       name      = "suspended"
++       parent_id = (known after apply)
++       tags_all  = (known after apply)
+    }
+
+  # module.admins_group.aws_iam_group.user_group will be created
++   resource "aws_iam_group" "user_group" {
++       arn       = (known after apply)
++       id        = (known after apply)
++       name      = "admins"
++       path      = "/"
++       unique_id = (known after apply)
+    }
+
+  # module.admins_group.aws_iam_group_membership.user_group will be created
++   resource "aws_iam_group_membership" "user_group" {
++       group = "admins"
++       id    = (known after apply)
++       name  = "admins-membership"
++       users = [
++           "alice.org-root",
++           "bob.org-root",
+        ]
+    }
+
+  # module.admins_group.aws_iam_group_policy_attachment.assume_role_policy_attachment will be created
++   resource "aws_iam_group_policy_attachment" "assume_role_policy_attachment" {
++       group      = "admins"
++       id         = (known after apply)
++       policy_arn = (known after apply)
+    }
+
+  # module.admins_group.aws_iam_policy.assume_role_policy will be created
++   resource "aws_iam_policy" "assume_role_policy" {
++       arn         = (known after apply)
++       description = "Allows the admins role to be assumed."
++       id          = (known after apply)
++       name        = "assume-role-admins"
++       path        = "/"
++       policy      = jsonencode(
+            {
++               Statement = [
++                   {
++                       Action   = "sts:AssumeRole"
++                       Effect   = "Allow"
++                       Resource = [
++                           "billing",
++                           "admin",
+                        ]
++                       Sid      = ""
+                    },
+                ]
++               Version   = "2012-10-17"
+            }
+        )
++       policy_id   = (known after apply)
++       tags_all    = (known after apply)
+    }
+
+  # module.billing_role_access.data.aws_iam_policy_document.role_assume_role_policy will be read during apply
+  # (config refers to values not yet known)
+ <= data "aws_iam_policy_document" "role_assume_role_policy" {
++       id   = (known after apply)
++       json = (known after apply)
+
++       statement {
++           actions = [
++               "sts:AssumeRole",
+            ]
+
++           condition {
++               test     = "Bool"
++               values   = [
++                   "true",
+                ]
++               variable = "aws:MultiFactorAuthPresent"
+            }
+
++           principals {
++               identifiers = [
++                   (known after apply),
+                ]
++               type        = "AWS"
+            }
+        }
+    }
+
+  # module.billing_role_access.aws_iam_role.main will be created
++   resource "aws_iam_role" "main" {
++       arn                   = (known after apply)
++       assume_role_policy    = (known after apply)
++       create_date           = (known after apply)
++       description           = "Cross-account role for billing"
++       force_detach_policies = false
++       id                    = (known after apply)
++       managed_policy_arns   = (known after apply)
++       max_session_duration  = 3600
++       name                  = "billing"
++       name_prefix           = (known after apply)
++       path                  = "/"
++       tags_all              = (known after apply)
++       unique_id             = (known after apply)
+
++       inline_policy {
++           name   = (known after apply)
++           policy = (known after apply)
+        }
+    }
+
+  # module.cloudtrail.aws_cloudtrail.main will be created
++   resource "aws_cloudtrail" "main" {
++       arn                           = (known after apply)
++       cloud_watch_logs_group_arn    = (known after apply)
++       cloud_watch_logs_role_arn     = (known after apply)
++       enable_log_file_validation    = true
++       enable_logging                = true
++       home_region                   = (known after apply)
++       id                            = (known after apply)
++       include_global_service_events = true
++       is_multi_region_trail         = true
++       is_organization_trail         = true
++       kms_key_id                    = (known after apply)
++       name                          = "cloudtrail"
++       s3_bucket_name                = (known after apply)
++       s3_key_prefix                 = "cloudtrail"
++       tags                          = {
++           "Automation" = "Terraform"
+        }
++       tags_all                      = {
++           "Automation" = "Terraform"
+        }
+    }
+
+  # module.cloudtrail.aws_cloudwatch_log_group.cloudtrail will be created
++   resource "aws_cloudwatch_log_group" "cloudtrail" {
++       arn               = (known after apply)
++       id                = (known after apply)
++       kms_key_id        = (known after apply)
++       name              = "cloudtrail-events"
++       retention_in_days = 90
++       tags              = {
++           "Automation" = "Terraform"
+        }
++       tags_all          = {
++           "Automation" = "Terraform"
+        }
+    }
+
+  # module.cloudtrail.aws_iam_policy.cloudtrail_cloudwatch_logs will be created
++   resource "aws_iam_policy" "cloudtrail_cloudwatch_logs" {
++       arn       = (known after apply)
++       id        = (known after apply)
++       name      = "cloudtrail-cloudwatch-logs-policy"
++       path      = "/"
++       policy    = jsonencode(
+            {
++               Statement = [
++                   {
++                       Action   = [
++                           "logs:PutLogEvents",
++                           "logs:CreateLogStream",
+                        ]
++                       Effect   = "Allow"
++                       Resource = "arn:aws:logs:eu-west-1:165133900345:log-group:cloudtrail-events:*"
++                       Sid      = "WriteCloudWatchLogs"
+                    },
+                ]
++               Version   = "2012-10-17"
+            }
+        )
++       policy_id = (known after apply)
++       tags_all  = (known after apply)
+    }
+
+  # module.cloudtrail.aws_iam_policy_attachment.main will be created
++   resource "aws_iam_policy_attachment" "main" {
++       id         = (known after apply)
++       name       = "cloudtrail-cloudwatch-logs-policy-attachment"
++       policy_arn = (known after apply)
++       roles      = [
++           "cloudtrail-cloudwatch-logs-role",
+        ]
+    }
+
+  # module.cloudtrail.aws_iam_role.cloudtrail_cloudwatch_role will be created
++   resource "aws_iam_role" "cloudtrail_cloudwatch_role" {
++       arn                   = (known after apply)
++       assume_role_policy    = jsonencode(
+            {
++               Statement = [
++                   {
++                       Action    = "sts:AssumeRole"
++                       Effect    = "Allow"
++                       Principal = {
++                           Service = "cloudtrail.amazonaws.com"
+                        }
++                       Sid       = ""
+                    },
+                ]
++               Version   = "2012-10-17"
+            }
+        )
++       create_date           = (known after apply)
++       force_detach_policies = false
++       id                    = (known after apply)
++       managed_policy_arns   = (known after apply)
++       max_session_duration  = 3600
++       name                  = "cloudtrail-cloudwatch-logs-role"
++       name_prefix           = (known after apply)
++       path                  = "/"
++       tags_all              = (known after apply)
++       unique_id             = (known after apply)
+
++       inline_policy {
++           name   = (known after apply)
++           policy = (known after apply)
+        }
+    }
+
+  # module.cloudtrail.aws_kms_alias.cloudtrail will be created
++   resource "aws_kms_alias" "cloudtrail" {
++       arn            = (known after apply)
++       id             = (known after apply)
++       name           = "alias/cloudtrail"
++       name_prefix    = (known after apply)
++       target_key_arn = (known after apply)
++       target_key_id  = (known after apply)
+    }
+
+  # module.cloudtrail.aws_kms_key.cloudtrail will be created
++   resource "aws_kms_key" "cloudtrail" {
++       arn                                = (known after apply)
++       bypass_policy_lockout_safety_check = false
++       customer_master_key_spec           = "SYMMETRIC_DEFAULT"
++       deletion_window_in_days            = 30
++       description                        = "A KMS key used to encrypt CloudTrail log files stored in S3."
++       enable_key_rotation                = true
++       id                                 = (known after apply)
++       is_enabled                         = true
++       key_id                             = (known after apply)
++       key_usage                          = "ENCRYPT_DECRYPT"
++       multi_region                       = (known after apply)
++       policy                             = jsonencode(
+            {
++               Statement = [
++                   {
++                       Action    = "kms:*"
++                       Effect    = "Allow"
++                       Principal = {
++                           AWS = "arn:aws:iam::165133900345:root"
+                        }
++                       Resource  = "*"
++                       Sid       = "Enable IAM User Permissions"
+                    },
++                   {
++                       Action    = "kms:GenerateDataKey*"
++                       Condition = {
++                           StringLike = {
++                               "kms:EncryptionContext:aws:cloudtrail:arn" = "arn:aws:cloudtrail:*:165133900345:trail/*"
+                            }
+                        }
++                       Effect    = "Allow"
++                       Principal = {
++                           Service = "cloudtrail.amazonaws.com"
+                        }
++                       Resource  = "*"
++                       Sid       = "Allow CloudTrail to encrypt logs"
+                    },
++                   {
++                       Action    = "kms:DescribeKey"
++                       Effect    = "Allow"
++                       Principal = {
++                           Service = "cloudtrail.amazonaws.com"
+                        }
++                       Resource  = "*"
++                       Sid       = "Allow CloudTrail to describe key"
+                    },
++                   {
++                       Action    = [
++                           "kms:ReEncryptFrom",
++                           "kms:Decrypt",
+                        ]
++                       Condition = {
++                           StringEquals = {
++                               "kms:CallerAccount" = "165133900345"
+                            }
++                           StringLike   = {
++                               "kms:EncryptionContext:aws:cloudtrail:arn" = "arn:aws:cloudtrail:*:165133900345:trail/*"
+                            }
+                        }
++                       Effect    = "Allow"
++                       Principal = {
++                           AWS = "*"
+                        }
++                       Resource  = "*"
++                       Sid       = "Allow principals in the account to decrypt log files"
+                    },
++                   {
++                       Action    = "kms:CreateAlias"
++                       Condition = {
++                           StringEquals = {
++                               "kms:CallerAccount" = "165133900345"
++                               "kms:ViaService"    = "ec2.eu-west-1.amazonaws.com"
+                            }
+                        }
++                       Effect    = "Allow"
++                       Principal = {
++                           AWS = "*"
+                        }
++                       Resource  = "*"
++                       Sid       = "Allow alias creation during setup"
+                    },
++                   {
++                       Action    = [
++                           "kms:ReEncryptFrom",
++                           "kms:Decrypt",
+                        ]
++                       Condition = {
++                           StringEquals = {
++                               "kms:CallerAccount" = "165133900345"
+                            }
++                           StringLike   = {
++                               "kms:EncryptionContext:aws:cloudtrail:arn" = "arn:aws:cloudtrail:*:165133900345:trail/*"
+                            }
+                        }
++                       Effect    = "Allow"
++                       Principal = {
++                           AWS = "*"
+                        }
++                       Resource  = "*"
++                       Sid       = "Enable cross account log decryption"
+                    },
++                   {
++                       Action    = [
++                           "kms:ReEncrypt*",
++                           "kms:GenerateDataKey*",
++                           "kms:Encrypt*",
++                           "kms:Describe*",
++                           "kms:Decrypt*",
+                        ]
++                       Effect    = "Allow"
++                       Principal = {
++                           Service = "logs.eu-west-1.amazonaws.com"
+                        }
++                       Resource  = "*"
++                       Sid       = "Allow logs KMS access"
+                    },
+                ]
++               Version   = "2012-10-17"
+            }
+        )
++       tags                               = {
++           "Automation" = "Terraform"
+        }
++       tags_all                           = {
++           "Automation" = "Terraform"
+        }
+    }
+
+  # module.config.data.aws_iam_policy_document.aws_config_policy will be read during apply
+  # (config refers to values not yet known)
+ <= data "aws_iam_policy_document" "aws_config_policy" {
++       id   = (known after apply)
++       json = (known after apply)
+
++       statement {
++           actions   = [
++               "s3:GetBucketAcl",
+            ]
++           effect    = "Allow"
++           resources = [
++               (known after apply),
+            ]
++           sid       = "AWSConfigBucketPermissionsCheck"
+        }
++       statement {
++           actions   = [
++               "s3:ListBucket",
+            ]
++           effect    = "Allow"
++           resources = [
++               (known after apply),
+            ]
++           sid       = "AWSConfigBucketExistenceCheck"
+        }
++       statement {
++           actions   = [
++               "s3:PutObject",
+            ]
++           effect    = "Allow"
++           resources = [
++               (known after apply),
+            ]
++           sid       = "AWSConfigBucketDelivery"
+
++           condition {
++               test     = "StringLike"
++               values   = [
++                   "bucket-owner-full-control",
+                ]
++               variable = "s3:x-amz-acl"
+            }
+        }
+    }
+
+  # module.config.aws_config_config_rule.acm-certificate-expiration-check[0] will be created
++   resource "aws_config_config_rule" "acm-certificate-expiration-check" {
++       arn                         = (known after apply)
++       description                 = "Ensures ACM Certificates in your account are marked for expiration within the specified number of days"
++       id                          = (known after apply)
++       input_parameters            = jsonencode(
+            {
++               daysToExpiration = "14"
+            }
+        )
++       maximum_execution_frequency = "TwentyFour_Hours"
++       name                        = "acm-certificate-expiration-check"
++       rule_id                     = (known after apply)
++       tags_all                    = (known after apply)
+
++       source {
++           owner             = "AWS"
++           source_identifier = "ACM_CERTIFICATE_EXPIRATION_CHECK"
+        }
+    }
+
+  # module.config.aws_config_config_rule.cloud-trail-encryption-enabled[0] will be created
++   resource "aws_config_config_rule" "cloud-trail-encryption-enabled" {
++       arn                         = (known after apply)
++       description                 = "Checks whether AWS CloudTrail is configured to use the server side encryption (SSE) AWS Key Management Service (AWS KMS) customer master key (CMK) encryption. The rule is COMPLIANT if the KmsKeyId is defined."
++       id                          = (known after apply)
++       maximum_execution_frequency = "TwentyFour_Hours"
++       name                        = "cloud-trail-encryption-enabled"
++       rule_id                     = (known after apply)
++       tags_all                    = (known after apply)
+
++       source {
++           owner             = "AWS"
++           source_identifier = "CLOUD_TRAIL_ENCRYPTION_ENABLED"
+        }
+    }
+
+  # module.config.aws_config_config_rule.cloud-trail-log-file-validation-enabled[0] will be created
++   resource "aws_config_config_rule" "cloud-trail-log-file-validation-enabled" {
++       arn                         = (known after apply)
++       description                 = "Checks whether AWS CloudTrail creates a signed digest file with logs. AWS recommends that the file validation must be enabled on all trails. The rule is NON_COMPLIANT if the validation is not enabled."
++       id                          = (known after apply)
++       maximum_execution_frequency = "TwentyFour_Hours"
++       name                        = "cloud-trail-log-file-validation-enabled"
++       rule_id                     = (known after apply)
++       tags_all                    = (known after apply)
+
++       source {
++           owner             = "AWS"
++           source_identifier = "CLOUD_TRAIL_LOG_FILE_VALIDATION_ENABLED"
+        }
+    }
+
+  # module.config.aws_config_config_rule.cloudtrail-enabled[0] will be created
++   resource "aws_config_config_rule" "cloudtrail-enabled" {
++       arn                         = (known after apply)
++       description                 = "Ensure CloudTrail is enabled"
++       id                          = (known after apply)
++       maximum_execution_frequency = "TwentyFour_Hours"
++       name                        = "cloudtrail-enabled"
++       rule_id                     = (known after apply)
++       tags_all                    = (known after apply)
+
++       source {
++           owner             = "AWS"
++           source_identifier = "CLOUD_TRAIL_ENABLED"
+        }
+    }
+
+  # module.config.aws_config_config_rule.cloudwatch_log_group_encrypted[0] will be created
++   resource "aws_config_config_rule" "cloudwatch_log_group_encrypted" {
++       arn         = (known after apply)
++       description = "Checks whether a log group in Amazon CloudWatch Logs is encrypted. The rule is NON_COMPLIANT if CloudWatch Logs has a log group without encryption enabled"
++       id          = (known after apply)
++       name        = "cloudwatch_log_group-encrypted"
++       rule_id     = (known after apply)
++       tags_all    = (known after apply)
+
++       source {
++           owner             = "AWS"
++           source_identifier = "CLOUDWATCH_LOG_GROUP_ENCRYPTED"
+        }
+    }
+
+  # module.config.aws_config_config_rule.ebs_snapshot_public_restorable[0] will be created
++   resource "aws_config_config_rule" "ebs_snapshot_public_restorable" {
++       arn         = (known after apply)
++       description = "Checks whether Amazon Elastic Block Store snapshots are not publicly restorable"
++       id          = (known after apply)
++       name        = "ebs-snapshot-public-restorable"
++       rule_id     = (known after apply)
++       tags_all    = (known after apply)
+
++       source {
++           owner             = "AWS"
++           source_identifier = "EBS_SNAPSHOT_PUBLIC_RESTORABLE_CHECK"
+        }
+    }
+
+  # module.config.aws_config_config_rule.ec2-encrypted-volumes[0] will be created
++   resource "aws_config_config_rule" "ec2-encrypted-volumes" {
++       arn         = (known after apply)
++       description = "Evaluates whether EBS volumes that are in an attached state are encrypted. Optionally, you can specify the ID of a KMS key to use to encrypt the volume."
++       id          = (known after apply)
++       name        = "ec2-volumes-must-be-encrypted"
++       rule_id     = (known after apply)
++       tags_all    = (known after apply)
+
++       source {
++           owner             = "AWS"
++           source_identifier = "ENCRYPTED_VOLUMES"
+        }
+    }
+
+  # module.config.aws_config_config_rule.ec2-volume-inuse-check[0] will be created
++   resource "aws_config_config_rule" "ec2-volume-inuse-check" {
++       arn         = (known after apply)
++       description = "Checks whether EBS volumes are attached to EC2 instances"
++       id          = (known after apply)
++       name        = "ec2-volume-inuse-check"
++       rule_id     = (known after apply)
++       tags_all    = (known after apply)
+
++       source {
++           owner             = "AWS"
++           source_identifier = "EC2_VOLUME_INUSE_CHECK"
+        }
+    }
+
+  # module.config.aws_config_config_rule.iam-group-has-users-check[0] will be created
++   resource "aws_config_config_rule" "iam-group-has-users-check" {
++       arn         = (known after apply)
++       description = "Checks whether IAM groups have at least one IAM user."
++       id          = (known after apply)
++       name        = "iam-group-has-users-check"
++       rule_id     = (known after apply)
++       tags_all    = (known after apply)
+
++       source {
++           owner             = "AWS"
++           source_identifier = "IAM_GROUP_HAS_USERS_CHECK"
+        }
+    }
+
+  # module.config.aws_config_config_rule.iam-password-policy[0] will be created
++   resource "aws_config_config_rule" "iam-password-policy" {
++       arn                         = (known after apply)
++       description                 = "Ensure the account password policy for IAM users meets the specified requirements"
++       id                          = (known after apply)
++       input_parameters            = jsonencode(
+            {
++               MaxPasswordAge             = "90"
++               MinimumPasswordLength      = "14"
++               PasswordReusePrevention    = "24"
++               RequireLowercaseCharacters = "true"
++               RequireNumbers             = "true"
++               RequireSymbols             = "true"
++               RequireUppercaseCharacters = "true"
+            }
+        )
++       maximum_execution_frequency = "TwentyFour_Hours"
++       name                        = "iam-password-policy"
++       rule_id                     = (known after apply)
++       tags_all                    = (known after apply)
+
++       source {
++           owner             = "AWS"
++           source_identifier = "IAM_PASSWORD_POLICY"
+        }
+    }
+
+  # module.config.aws_config_config_rule.iam-user-no-policies-check[0] will be created
++   resource "aws_config_config_rule" "iam-user-no-policies-check" {
++       arn         = (known after apply)
++       description = "Ensure that none of your IAM users have policies attached. IAM users must inherit permissions from IAM groups or roles."
++       id          = (known after apply)
++       name        = "iam-user-no-policies-check"
++       rule_id     = (known after apply)
++       tags_all    = (known after apply)
+
++       source {
++           owner             = "AWS"
++           source_identifier = "IAM_USER_NO_POLICIES_CHECK"
+        }
+    }
+
+  # module.config.aws_config_config_rule.iam_root_access_key[0] will be created
++   resource "aws_config_config_rule" "iam_root_access_key" {
++       arn         = (known after apply)
++       description = "Checks whether the root user access key is available. The rule is COMPLIANT if the user access key does not exist"
++       id          = (known after apply)
++       name        = "iam-root-access-key"
++       rule_id     = (known after apply)
++       tags_all    = (known after apply)
+
++       source {
++           owner             = "AWS"
++           source_identifier = "IAM_ROOT_ACCESS_KEY_CHECK"
+        }
+    }
+
+  # module.config.aws_config_config_rule.instances-in-vpc[0] will be created
++   resource "aws_config_config_rule" "instances-in-vpc" {
++       arn         = (known after apply)
++       description = "Ensure all EC2 instances run in a VPC"
++       id          = (known after apply)
++       name        = "instances-in-vpc"
++       rule_id     = (known after apply)
++       tags_all    = (known after apply)
+
++       source {
++           owner             = "AWS"
++           source_identifier = "INSTANCES_IN_VPC"
+        }
+    }
+
+  # module.config.aws_config_config_rule.multi-region-cloud-trail-enabled[0] will be created
++   resource "aws_config_config_rule" "multi-region-cloud-trail-enabled" {
++       arn                         = (known after apply)
++       description                 = "Checks that there is at least one multi-region AWS CloudTrail. The rule is NON_COMPLIANT if the trails do not match inputs parameters."
++       id                          = (known after apply)
++       maximum_execution_frequency = "TwentyFour_Hours"
++       name                        = "multi-region-cloud-trail-enabled"
++       rule_id                     = (known after apply)
++       tags_all                    = (known after apply)
+
++       source {
++           owner             = "AWS"
++           source_identifier = "MULTI_REGION_CLOUD_TRAIL_ENABLED"
+        }
+    }
+
+  # module.config.aws_config_config_rule.rds-snapshots-public-prohibited[0] will be created
++   resource "aws_config_config_rule" "rds-snapshots-public-prohibited" {
++       arn         = (known after apply)
++       description = "Checks if Amazon Relational Database Service (Amazon RDS) snapshots are public."
++       id          = (known after apply)
++       name        = "rds-snapshots-public-prohibited"
++       rule_id     = (known after apply)
++       tags_all    = (known after apply)
+
++       source {
++           owner             = "AWS"
++           source_identifier = "RDS_SNAPSHOTS_PUBLIC_PROHIBITED"
+        }
+    }
+
+  # module.config.aws_config_config_rule.rds-storage-encrypted[0] will be created
++   resource "aws_config_config_rule" "rds-storage-encrypted" {
++       arn         = (known after apply)
++       description = "Checks whether storage encryption is enabled for your RDS DB instances."
++       id          = (known after apply)
++       name        = "rds-storage-encrypted"
++       rule_id     = (known after apply)
++       tags_all    = (known after apply)
+
++       source {
++           owner             = "AWS"
++           source_identifier = "RDS_STORAGE_ENCRYPTED"
+        }
+    }
+
+  # module.config.aws_config_config_rule.root-account-mfa-enabled[0] will be created
++   resource "aws_config_config_rule" "root-account-mfa-enabled" {
++       arn                         = (known after apply)
++       description                 = "Ensure root AWS account has MFA enabled"
++       id                          = (known after apply)
++       maximum_execution_frequency = "TwentyFour_Hours"
++       name                        = "root-account-mfa-enabled"
++       rule_id                     = (known after apply)
++       tags_all                    = (known after apply)
+
++       source {
++           owner             = "AWS"
++           source_identifier = "ROOT_ACCOUNT_MFA_ENABLED"
+        }
+    }
+
+  # module.config.aws_config_config_rule.s3-bucket-public-write-prohibited[0] will be created
++   resource "aws_config_config_rule" "s3-bucket-public-write-prohibited" {
++       arn         = (known after apply)
++       description = "Checks that your S3 buckets do not allow public write access."
++       id          = (known after apply)
++       name        = "s3-bucket-public-write-prohibited"
++       rule_id     = (known after apply)
++       tags_all    = (known after apply)
+
++       source {
++           owner             = "AWS"
++           source_identifier = "S3_BUCKET_PUBLIC_WRITE_PROHIBITED"
+        }
+    }
+
+  # module.config.aws_config_config_rule.s3_bucket_ssl_requests_only[0] will be created
++   resource "aws_config_config_rule" "s3_bucket_ssl_requests_only" {
++       arn         = (known after apply)
++       description = "Checks whether S3 buckets have policies that require requests to use Secure Socket Layer (SSL)."
++       id          = (known after apply)
++       name        = "s3-bucket-ssl-requests-only"
++       rule_id     = (known after apply)
++       tags_all    = (known after apply)
+
++       source {
++           owner             = "AWS"
++           source_identifier = "S3_BUCKET_SSL_REQUESTS_ONLY"
+        }
+    }
+
+  # module.config.aws_config_config_rule.vpc_default_security_group_closed[0] will be created
++   resource "aws_config_config_rule" "vpc_default_security_group_closed" {
++       arn         = (known after apply)
++       description = "Checks that the default security group of any Amazon Virtual Private Cloud (VPC) does not allow inbound or outbound traffic"
++       id          = (known after apply)
++       name        = "vpc-default-security-group-closed"
++       rule_id     = (known after apply)
++       tags_all    = (known after apply)
+
++       source {
++           owner             = "AWS"
++           source_identifier = "VPC_DEFAULT_SECURITY_GROUP_CLOSED"
+        }
+    }
+
+  # module.config.aws_config_configuration_aggregator.organization[0] will be created
++   resource "aws_config_configuration_aggregator" "organization" {
++       arn      = (known after apply)
++       id       = (known after apply)
++       name     = "organization"
++       tags_all = (known after apply)
+
++       organization_aggregation_source {
++           all_regions = true
++           role_arn    = (known after apply)
+        }
+    }
+
+  # module.config.aws_config_configuration_recorder.main[0] will be created
++   resource "aws_config_configuration_recorder" "main" {
++       id       = (known after apply)
++       name     = "ologist-aws-org-root-config-eu-west-1"
++       role_arn = (known after apply)
+
++       recording_group {
++           all_supported                 = true
++           include_global_resource_types = true
+        }
+    }
+
+  # module.config.aws_config_configuration_recorder_status.main[0] will be created
++   resource "aws_config_configuration_recorder_status" "main" {
++       id         = (known after apply)
++       is_enabled = true
++       name       = "ologist-aws-org-root-config-eu-west-1"
+    }
+
+  # module.config.aws_config_delivery_channel.main[0] will be created
++   resource "aws_config_delivery_channel" "main" {
++       id             = (known after apply)
++       name           = "ologist-aws-org-root-config-eu-west-1"
++       s3_bucket_name = (known after apply)
++       s3_key_prefix  = "config"
+
++       snapshot_delivery_properties {
++           delivery_frequency = "Six_Hours"
+        }
+    }
+
+  # module.config.aws_iam_policy.aws-config-policy[0] will be created
++   resource "aws_iam_policy" "aws-config-policy" {
++       arn       = (known after apply)
++       id        = (known after apply)
++       name      = "ologist-aws-org-root-config-eu-west-1-policy"
++       path      = "/"
++       policy    = (known after apply)
++       policy_id = (known after apply)
++       tags_all  = (known after apply)
+    }
+
+  # module.config.aws_iam_role.aggregator[0] will be created
++   resource "aws_iam_role" "aggregator" {
++       arn                   = (known after apply)
++       assume_role_policy    = jsonencode(
+            {
++               Statement = [
++                   {
++                       Action    = "sts:AssumeRole"
++                       Effect    = "Allow"
++                       Principal = {
++                           Service = "config.amazonaws.com"
+                        }
++                       Sid       = ""
+                    },
+                ]
++               Version   = "2012-10-17"
+            }
+        )
++       create_date           = (known after apply)
++       force_detach_policies = false
++       id                    = (known after apply)
++       managed_policy_arns   = (known after apply)
++       max_session_duration  = 3600
++       name                  = "ologist-aws-org-root-config-eu-west-1-aggregator-role"
++       name_prefix           = (known after apply)
++       path                  = "/"
++       tags_all              = (known after apply)
++       unique_id             = (known after apply)
+
++       inline_policy {
++           name   = (known after apply)
++           policy = (known after apply)
+        }
+    }
+
+  # module.config.aws_iam_role.main[0] will be created
++   resource "aws_iam_role" "main" {
++       arn                   = (known after apply)
++       assume_role_policy    = jsonencode(
+            {
++               Statement = [
++                   {
++                       Action    = "sts:AssumeRole"
++                       Effect    = "Allow"
++                       Principal = {
++                           Service = "config.amazonaws.com"
+                        }
++                       Sid       = ""
+                    },
+                ]
++               Version   = "2012-10-17"
+            }
+        )
++       create_date           = (known after apply)
++       force_detach_policies = false
++       id                    = (known after apply)
++       managed_policy_arns   = (known after apply)
++       max_session_duration  = 3600
++       name                  = "ologist-aws-org-root-config-eu-west-1-role"
++       name_prefix           = (known after apply)
++       path                  = "/"
++       tags_all              = (known after apply)
++       unique_id             = (known after apply)
+
++       inline_policy {
++           name   = (known after apply)
++           policy = (known after apply)
+        }
+    }
+
+  # module.config.aws_iam_role_policy_attachment.aggregator[0] will be created
++   resource "aws_iam_role_policy_attachment" "aggregator" {
++       id         = (known after apply)
++       policy_arn = "arn:aws:iam::aws:policy/service-role/AWSConfigRoleForOrganizations"
++       role       = "ologist-aws-org-root-config-eu-west-1-aggregator-role"
+    }
+
+  # module.config.aws_iam_role_policy_attachment.aws-config-policy[0] will be created
++   resource "aws_iam_role_policy_attachment" "aws-config-policy" {
++       id         = (known after apply)
++       policy_arn = (known after apply)
++       role       = "ologist-aws-org-root-config-eu-west-1-role"
+    }
+
+  # module.config.aws_iam_role_policy_attachment.managed-policy[0] will be created
++   resource "aws_iam_role_policy_attachment" "managed-policy" {
++       id         = (known after apply)
++       policy_arn = "arn:aws:iam::aws:policy/service-role/AWS_ConfigRole"
++       role       = "ologist-aws-org-root-config-eu-west-1-role"
+    }
+
+  # module.iam_enforce_mfa.aws_iam_group_policy_attachment.main[0] will be created
++   resource "aws_iam_group_policy_attachment" "main" {
++       group      = "admins"
++       id         = (known after apply)
++       policy_arn = (known after apply)
+    }
+
+  # module.iam_enforce_mfa.aws_iam_policy.main will be created
++   resource "aws_iam_policy" "main" {
++       arn         = (known after apply)
++       description = "Requires valid MFA security token for all API calls except those needed for managing a user's own IAM user."
++       id          = (known after apply)
++       name        = "enforce-mfa"
++       path        = "/"
++       policy      = jsonencode(
+            {
++               Statement = [
++                   {
++                       Action   = [
++                           "iam:ListVirtualMFADevices",
++                           "iam:ListUsers",
++                           "iam:ListAccountAliases",
++                           "iam:GetAccountSummary",
++                           "iam:GetAccountPasswordPolicy",
+                        ]
++                       Effect   = "Allow"
++                       Resource = "*"
++                       Sid      = "AllowAllUsersToListAccounts"
+                    },
++                   {
++                       Action   = [
++                           "iam:UploadSigningCertificate",
++                           "iam:UpdateSigningCertificate",
++                           "iam:UpdateAccessKey",
++                           "iam:ListSigningCertificates",
++                           "iam:ListAccessKeys",
++                           "iam:GetLoginProfile",
++                           "iam:DeleteSigningCertificate",
++                           "iam:DeleteLoginProfile",
++                           "iam:DeleteAccessKey",
++                           "iam:CreateAccessKey",
+                        ]
++                       Effect   = "Allow"
++                       Resource = "arn:aws:iam::*:user/${aws:username}"
++                       Sid      = "AllowIndividualUserToSeeAndManageOnlyTheirOwnAccountInformation"
+                    },
++                   {
++                       Action   = "iam:ListMFADevices"
++                       Effect   = "Allow"
++                       Resource = [
++                           "arn:aws:iam::*:user/${aws:username}",
++                           "arn:aws:iam::*:mfa/*",
+                        ]
++                       Sid      = "AllowIndividualUserToListOnlyTheirOwnMFA"
+                    },
++                   {
++                       Action   = [
++                           "iam:ResyncMFADevice",
++                           "iam:EnableMFADevice",
++                           "iam:DeleteVirtualMFADevice",
++                           "iam:CreateVirtualMFADevice",
+                        ]
++                       Effect   = "Allow"
++                       Resource = [
++                           "arn:aws:iam::*:user/${aws:username}",
++                           "arn:aws:iam::*:mfa/${aws:username}",
+                        ]
++                       Sid      = "AllowIndividualUserToManageTheirOwnMFA"
+                    },
++                   {
++                       Action    = "iam:DeactivateMFADevice"
++                       Condition = {
++                           Bool = {
++                               "aws:MultiFactorAuthPresent" = "true"
+                            }
+                        }
++                       Effect    = "Allow"
++                       Resource  = [
++                           "arn:aws:iam::*:user/${aws:username}",
++                           "arn:aws:iam::*:mfa/${aws:username}",
+                        ]
++                       Sid       = "AllowIndividualUserToDeactivateOnlyTheirOwnMFAOnlyWhenUsingMFA"
+                    },
++                   {
++                       Condition = {
++                           BoolIfExists = {
++                               "aws:MultiFactorAuthPresent" = "false"
+                            }
+                        }
++                       Effect    = "Deny"
++                       NotAction = [
++                           "sts:GetSessionToken",
++                           "iam:ResyncMFADevice",
++                           "iam:ListVirtualMFADevices",
++                           "iam:ListUsers",
++                           "iam:ListServiceSpecificCredentials",
++                           "iam:ListSSHPublicKeys",
++                           "iam:ListMFADevices",
++                           "iam:ListAccountAliases",
++                           "iam:ListAccessKeys",
++                           "iam:GetAccountSummary",
++                           "iam:EnableMFADevice",
++                           "iam:DeleteVirtualMFADevice",
++                           "iam:CreateVirtualMFADevice",
++                           "iam:CreateLoginProfile",
++                           "iam:ChangePassword",
+                        ]
++                       Resource  = "*"
++                       Sid       = "BlockMostAccessUnlessSignedInWithMFA"
+                    },
+                ]
++               Version   = "2012-10-17"
+            }
+        )
++       policy_id   = (known after apply)
++       tags_all    = (known after apply)
+    }
+
+  # module.logs.data.aws_iam_policy_document.main will be read during apply
+  # (config refers to values not yet known)
+ <= data "aws_iam_policy_document" "main" {
++       id   = (known after apply)
++       json = (known after apply)
+
++       statement {
++           actions   = [
++               "s3:GetBucketAcl",
+            ]
++           effect    = "Allow"
++           resources = [
++               "arn:aws:s3:::ologist-aws-org-root-logs",
+            ]
++           sid       = "cloudtrail-logs-get-bucket-acl"
+
++           principals {
++               identifiers = [
++                   "cloudtrail.amazonaws.com",
+                ]
++               type        = "Service"
+            }
+        }
++       statement {
++           actions   = [
++               "s3:PutObject",
+            ]
++           effect    = "Allow"
++           resources = (known after apply)
++           sid       = "cloudtrail-logs-put-object"
+
++           condition {
++               test     = "StringEquals"
++               values   = [
++                   "bucket-owner-full-control",
+                ]
++               variable = "s3:x-amz-acl"
+            }
+
++           principals {
++               identifiers = [
++                   "cloudtrail.amazonaws.com",
+                ]
++               type        = "Service"
+            }
+        }
++       statement {
++           actions   = [
++               "s3:GetBucketAcl",
+            ]
++           effect    = "Deny"
++           resources = [
++               "arn:aws:s3:::ologist-aws-org-root-logs",
+            ]
++           sid       = "cloudwatch-logs-get-bucket-acl"
+
++           principals {
++               identifiers = [
++                   "logs.eu-west-1.amazonaws.com",
+                ]
++               type        = "Service"
+            }
+        }
++       statement {
++           actions   = [
++               "s3:PutObject",
+            ]
++           effect    = "Deny"
++           resources = [
++               "arn:aws:s3:::ologist-aws-org-root-logs/cloudwatch/*",
+            ]
++           sid       = "cloudwatch-logs-put-object"
+
++           condition {
++               test     = "StringEquals"
++               values   = [
++                   "bucket-owner-full-control",
+                ]
++               variable = "s3:x-amz-acl"
+            }
+
++           principals {
++               identifiers = [
++                   "logs.eu-west-1.amazonaws.com",
+                ]
++               type        = "Service"
+            }
+        }
++       statement {
++           actions   = [
++               "s3:GetBucketAcl",
+            ]
++           effect    = "Deny"
++           resources = [
++               "arn:aws:s3:::ologist-aws-org-root-logs",
+            ]
++           sid       = "config-permissions-check"
+
++           principals {
++               identifiers = [
++                   "config.amazonaws.com",
+                ]
++               type        = "Service"
+            }
+        }
++       statement {
++           actions   = [
++               "s3:PutObject",
+            ]
++           effect    = "Deny"
++           resources = [
++               "arn:aws:s3:::ologist-aws-org-root-logs/config/AWSLogs/165133900345/Config/*",
+            ]
++           sid       = "config-bucket-delivery"
+
++           condition {
++               test     = "StringEquals"
++               values   = [
++                   "bucket-owner-full-control",
+                ]
++               variable = "s3:x-amz-acl"
+            }
+
++           principals {
++               identifiers = [
++                   "config.amazonaws.com",
+                ]
++               type        = "Service"
+            }
+        }
++       statement {
++           actions   = [
++               "s3:PutObject",
+            ]
++           effect    = "Deny"
++           resources = [
++               "arn:aws:s3:::ologist-aws-org-root-logs/elb/AWSLogs/165133900345/*",
+            ]
++           sid       = "elb-logs-put-object"
+
++           principals {
++               identifiers = [
++                   "arn:aws:iam::156460612806:root",
+                ]
++               type        = "AWS"
+            }
+        }
++       statement {
++           actions   = [
++               "s3:PutObject",
+            ]
++           effect    = "Deny"
++           resources = [
++               "arn:aws:s3:::ologist-aws-org-root-logs/alb/AWSLogs/165133900345/*",
+            ]
++           sid       = "alb-logs-put-object"
+
++           principals {
++               identifiers = [
++                   "arn:aws:iam::156460612806:root",
+                ]
++               type        = "AWS"
+            }
+        }
++       statement {
++           actions   = [
++               "s3:PutObject",
+            ]
++           effect    = "Deny"
++           resources = [
++               "arn:aws:s3:::ologist-aws-org-root-logs/nlb/AWSLogs/165133900345/*",
+            ]
++           sid       = "nlb-logs-put-object"
+
++           condition {
++               test     = "StringEquals"
++               values   = [
++                   "bucket-owner-full-control",
+                ]
++               variable = "s3:x-amz-acl"
+            }
+
++           principals {
++               identifiers = [
++                   "delivery.logs.amazonaws.com",
+                ]
++               type        = "Service"
+            }
+        }
++       statement {
++           actions   = [
++               "s3:GetBucketAcl",
+            ]
++           effect    = "Deny"
++           resources = [
++               "arn:aws:s3:::ologist-aws-org-root-logs",
+            ]
++           sid       = "nlb-logs-acl-check"
+
++           principals {
++               identifiers = [
++                   "delivery.logs.amazonaws.com",
+                ]
++               type        = "Service"
+            }
+        }
++       statement {
++           actions   = [
++               "s3:PutObject",
+            ]
++           effect    = "Deny"
++           resources = [
++               "arn:aws:s3:::ologist-aws-org-root-logs/redshift/*",
+            ]
++           sid       = "redshift-logs-put-object"
+
++           principals {
++               identifiers = [
++                   "arn:aws:iam::210876761215:user/logs",
+                ]
++               type        = "AWS"
+            }
+        }
++       statement {
++           actions   = [
++               "s3:GetBucketAcl",
+            ]
++           effect    = "Deny"
++           resources = [
++               "arn:aws:s3:::ologist-aws-org-root-logs",
+            ]
++           sid       = "redshift-logs-get-bucket-acl"
+
++           principals {
++               identifiers = [
++                   "arn:aws:iam::210876761215:user/logs",
+                ]
++               type        = "AWS"
+            }
+        }
++       statement {
++           actions   = [
++               "s3:*",
+            ]
++           effect    = "Deny"
++           resources = [
++               "arn:aws:s3:::ologist-aws-org-root-logs",
++               "arn:aws:s3:::ologist-aws-org-root-logs/*",
+            ]
++           sid       = "enforce-tls-requests-only"
+
++           condition {
++               test     = "Bool"
++               values   = [
++                   "false",
+                ]
++               variable = "aws:SecureTransport"
+            }
+
++           principals {
++               identifiers = [
++                   "*",
+                ]
++               type        = "AWS"
+            }
+        }
+    }
+
+  # module.logs.aws_s3_bucket.aws_logs will be created
++   resource "aws_s3_bucket" "aws_logs" {
++       acceleration_status                  = (known after apply)
++       acl                                  = (known after apply)
++       arn                                  = (known after apply)
++       bucket                               = "ologist-aws-org-root-logs"
++       bucket_domain_name                   = (known after apply)
++       bucket_regional_domain_name          = (known after apply)
++       cors_rule                            = (known after apply)
++       force_destroy                        = false
++       grant                                = (known after apply)
++       hosted_zone_id                       = (known after apply)
++       id                                   = (known after apply)
++       lifecycle_rule                       = (known after apply)
++       logging                              = (known after apply)
++       policy                               = (known after apply)
++       region                               = (known after apply)
++       replication_configuration            = (known after apply)
++       request_payer                        = (known after apply)
++       server_side_encryption_configuration = (known after apply)
++       tags                                 = {
++           "Name" = "ologist-aws-org-root-logs"
+        }
++       tags_all                             = {
++           "Name" = "ologist-aws-org-root-logs"
+        }
++       versioning                           = (known after apply)
++       website                              = (known after apply)
++       website_domain                       = (known after apply)
++       website_endpoint                     = (known after apply)
+
++       object_lock_configuration {
++           object_lock_enabled = (known after apply)
++           rule                = (known after apply)
+        }
+    }
+
+  # module.logs.aws_s3_bucket_acl.aws_logs will be created
++   resource "aws_s3_bucket_acl" "aws_logs" {
++       acl    = "log-delivery-write"
++       bucket = (known after apply)
++       id     = (known after apply)
+
++       access_control_policy {
++           grant {
++               permission = (known after apply)
+
++               grantee {
++                   display_name  = (known after apply)
++                   email_address = (known after apply)
++                   id            = (known after apply)
++                   type          = (known after apply)
++                   uri           = (known after apply)
+                }
+            }
+
++           owner {
++               display_name = (known after apply)
++               id           = (known after apply)
+            }
+        }
+    }
+
+  # module.logs.aws_s3_bucket_lifecycle_configuration.aws_logs will be created
++   resource "aws_s3_bucket_lifecycle_configuration" "aws_logs" {
++       bucket = (known after apply)
++       id     = (known after apply)
+
++       rule {
++           id     = "expire_all_logs"
++           status = "Enabled"
+
++           expiration {
++               days                         = 90
++               expired_object_delete_marker = (known after apply)
+            }
+
++           filter {
++               prefix = "/*"
+            }
+
++           noncurrent_version_expiration {
++               noncurrent_days = 30
+            }
+        }
+    }
+
+  # module.logs.aws_s3_bucket_policy.aws_logs will be created
++   resource "aws_s3_bucket_policy" "aws_logs" {
++       bucket = (known after apply)
++       id     = (known after apply)
++       policy = (known after apply)
+    }
+
+  # module.logs.aws_s3_bucket_public_access_block.public_access_block[0] will be created
++   resource "aws_s3_bucket_public_access_block" "public_access_block" {
++       block_public_acls       = true
++       block_public_policy     = true
++       bucket                  = (known after apply)
++       id                      = (known after apply)
++       ignore_public_acls      = true
++       restrict_public_buckets = true
+    }
+
+  # module.logs.aws_s3_bucket_server_side_encryption_configuration.aws_logs will be created
++   resource "aws_s3_bucket_server_side_encryption_configuration" "aws_logs" {
++       bucket = (known after apply)
++       id     = (known after apply)
+
++       rule {
++           apply_server_side_encryption_by_default {
++               sse_algorithm = "AES256"
+            }
+        }
+    }
+
+  # module.logs.aws_s3_bucket_versioning.aws_logs will be created
++   resource "aws_s3_bucket_versioning" "aws_logs" {
++       bucket = (known after apply)
++       id     = (known after apply)
+
++       versioning_configuration {
++           mfa_delete = (known after apply)
++           status     = "Suspended"
+        }
+    }
+
+  # module.org_scps.aws_organizations_policy.deny_all_access will be created
++   resource "aws_organizations_policy" "deny_all_access" {
++       arn         = (known after apply)
++       content     = jsonencode(
+            {
++               Statement = [
++                   {
++                       Action   = "*"
++                       Effect   = "Deny"
++                       Resource = "*"
++                       Sid      = ""
+                    },
+                ]
++               Version   = "2012-10-17"
+            }
+        )
++       description = "Deny all access"
++       id          = (known after apply)
++       name        = "deny-all-access"
++       tags_all    = (known after apply)
++       type        = "SERVICE_CONTROL_POLICY"
+    }
+
+  # module.org_scps.aws_organizations_policy.deny_creating_iam_users will be created
++   resource "aws_organizations_policy" "deny_creating_iam_users" {
++       arn         = (known after apply)
++       content     = jsonencode(
+            {
++               Statement = [
++                   {
++                       Action   = [
++                           "iam:CreateUser",
++                           "iam:CreateAccessKey",
+                        ]
++                       Effect   = "Deny"
++                       Resource = "*"
++                       Sid      = ""
+                    },
+                ]
++               Version   = "2012-10-17"
+            }
+        )
++       description = "Deny the ability to create IAM users or Access Keys"
++       id          = (known after apply)
++       name        = "deny-creating-iam-users"
++       tags_all    = (known after apply)
++       type        = "SERVICE_CONTROL_POLICY"
+    }
+
+  # module.org_scps.aws_organizations_policy.deny_deleting_cloudwatch_logs will be created
++   resource "aws_organizations_policy" "deny_deleting_cloudwatch_logs" {
++       arn         = (known after apply)
++       content     = jsonencode(
+            {
++               Statement = [
++                   {
++                       Action   = [
++                           "logs:DeleteLogStream",
++                           "logs:DeleteLogGroup",
++                           "ec2:DeleteFlowLogs",
+                        ]
++                       Effect   = "Deny"
++                       Resource = "*"
++                       Sid      = ""
+                    },
+                ]
++               Version   = "2012-10-17"
+            }
+        )
++       description = "Deny deleting Cloudwatch log groups, log streams, and VPC flow logs"
++       id          = (known after apply)
++       name        = "deny-deleting-cloudwatch-logs"
++       tags_all    = (known after apply)
++       type        = "SERVICE_CONTROL_POLICY"
+    }
+
+  # module.org_scps.aws_organizations_policy.deny_deleting_kms_keys will be created
++   resource "aws_organizations_policy" "deny_deleting_kms_keys" {
++       arn         = (known after apply)
++       content     = jsonencode(
+            {
++               Statement = [
++                   {
++                       Action   = [
++                           "kms:ScheduleKeyDeletion",
++                           "kms:Delete*",
+                        ]
++                       Effect   = "Deny"
++                       Resource = "*"
++                       Sid      = ""
+                    },
+                ]
++               Version   = "2012-10-17"
+            }
+        )
++       description = "Deny deleting KMS keys"
++       id          = (known after apply)
++       name        = "deny-deleting-kms-keys"
++       tags_all    = (known after apply)
++       type        = "SERVICE_CONTROL_POLICY"
+    }
+
+  # module.org_scps.aws_organizations_policy.deny_deleting_route53_zones will be created
++   resource "aws_organizations_policy" "deny_deleting_route53_zones" {
++       arn         = (known after apply)
++       content     = jsonencode(
+            {
++               Statement = [
++                   {
++                       Action   = "route53:DeleteHostedZone"
++                       Effect   = "Deny"
++                       Resource = "*"
++                       Sid      = ""
+                    },
+                ]
++               Version   = "2012-10-17"
+            }
+        )
++       description = "Deny deleting Route53 Hosted Zones"
++       id          = (known after apply)
++       name        = "deny-deleting-route53-zones"
++       tags_all    = (known after apply)
++       type        = "SERVICE_CONTROL_POLICY"
+    }
+
+  # module.org_scps.aws_organizations_policy.deny_leaving_orgs will be created
++   resource "aws_organizations_policy" "deny_leaving_orgs" {
++       arn         = (known after apply)
++       content     = jsonencode(
+            {
++               Statement = [
++                   {
++                       Action   = "organizations:LeaveOrganization"
++                       Effect   = "Deny"
++                       Resource = "*"
++                       Sid      = ""
+                    },
+                ]
++               Version   = "2012-10-17"
+            }
+        )
++       description = "Deny the ability for an AWS account or Organizational Unit from leaving the AWS Organization"
++       id          = (known after apply)
++       name        = "deny-leaving-orgs"
++       tags_all    = (known after apply)
++       type        = "SERVICE_CONTROL_POLICY"
+    }
+
+  # module.org_scps.aws_organizations_policy.deny_root_account will be created
++   resource "aws_organizations_policy" "deny_root_account" {
++       arn         = (known after apply)
++       content     = jsonencode(
+            {
++               Statement = [
++                   {
++                       Action    = "*"
++                       Condition = {
++                           StringLike = {
++                               "aws:PrincipalArn" = "arn:aws:iam::*:root"
+                            }
+                        }
++                       Effect    = "Deny"
++                       Resource  = "*"
++                       Sid       = ""
+                    },
+                ]
++               Version   = "2012-10-17"
+            }
+        )
++       description = "Deny the root user from taking any action"
++       id          = (known after apply)
++       name        = "deny-root-account"
++       tags_all    = (known after apply)
++       type        = "SERVICE_CONTROL_POLICY"
+    }
+
+  # module.org_scps.aws_organizations_policy.require_s3_encryption will be created
++   resource "aws_organizations_policy" "require_s3_encryption" {
++       arn         = (known after apply)
++       content     = jsonencode(
+            {
++               Statement = [
++                   {
++                       Action    = "s3:PutObject"
++                       Condition = {
++                           StringNotEquals = {
++                               "s3:x-amz-server-side-encryption" = "AES256"
+                            }
+                        }
++                       Effect    = "Deny"
++                       Resource  = "*"
++                       Sid       = ""
+                    },
++                   {
++                       Action    = "s3:PutObject"
++                       Condition = {
++                           Null = {
++                               "s3:x-amz-server-side-encryption" = "true"
+                            }
+                        }
++                       Effect    = "Deny"
++                       Resource  = "*"
++                       Sid       = ""
+                    },
+                ]
++               Version   = "2012-10-17"
+            }
+        )
++       description = "Require that all Amazon S3 buckets use AES256 encryption"
++       id          = (known after apply)
++       name        = "require-s3-encryption"
++       tags_all    = (known after apply)
++       type        = "SERVICE_CONTROL_POLICY"
+    }
+
+  # module.org_scps.aws_organizations_policy.restrict_regions will be created
++   resource "aws_organizations_policy" "restrict_regions" {
++       arn         = (known after apply)
++       content     = jsonencode(
+            {
++               Statement = [
++                   {
++                       Condition = {
++                           StringNotEquals = {
++                               "aws:RequestedRegion" = ""
+                            }
+                        }
++                       Effect    = "Deny"
++                       NotAction = [
++                           "waf:*",
++                           "support:*",
++                           "sts:*",
++                           "route53:*",
++                           "organizations:*",
++                           "importexport:*",
++                           "iam:*",
++                           "globalaccelerator:*",
++                           "cloudfront:*",
++                           "budgets:*",
+                        ]
++                       Resource  = "*"
++                       Sid       = "LimitRegionsSCP"
+                    },
+                ]
++               Version   = "2012-10-17"
+            }
+        )
++       description = "Restrict regions for deployable resources"
++       id          = (known after apply)
++       name        = "restrict-regions"
++       tags_all    = (known after apply)
++       type        = "SERVICE_CONTROL_POLICY"
+    }
+
+  # module.org_scps.aws_organizations_policy_attachment.deny_all_access[0] will be created
++   resource "aws_organizations_policy_attachment" "deny_all_access" {
++       id        = (known after apply)
++       policy_id = (known after apply)
++       target_id = (known after apply)
+    }
+
+  # module.org_scps.aws_organizations_policy_attachment.deny_leaving_orgs[0] will be created
++   resource "aws_organizations_policy_attachment" "deny_leaving_orgs" {
++       id        = (known after apply)
++       policy_id = (known after apply)
++       target_id = (known after apply)
+    }
+
+  # module.org_scps.aws_organizations_policy_attachment.deny_root_account[0] will be created
++   resource "aws_organizations_policy_attachment" "deny_root_account" {
++       id        = (known after apply)
++       policy_id = (known after apply)
++       target_id = (known after apply)
+    }
+
+  # module.org_scps.aws_organizations_policy_attachment.require_s3_encryption[0] will be created
++   resource "aws_organizations_policy_attachment" "require_s3_encryption" {
++       id        = (known after apply)
++       policy_id = (known after apply)
++       target_id = (known after apply)
+    }
+
+Plan: 75 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
++   aws_organizations_account_ologist_id_id       = (known after apply)
++   aws_organizations_account_ologist_infra_id    = (known after apply)
++   aws_organizations_account_ologist_org_root_id = "165133900345"
