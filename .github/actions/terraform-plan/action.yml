@@ -69,6 +69,7 @@ runs:
     run: terraform plan -lock=false -input=false -var-file=tfvars/${{ inputs.environment }}.tfvars -no-color -out=tfplan && terraform show -no-color tfplan | sed -E 's/^([[:space:]]+)([-+])/\2\1/g' > plan.txt
 
   - name: Reformat Plan
+    working-directory: ./terraform/${{ inputs.workspace }}
     id: rfmtplan
     shell: bash
     run: |
