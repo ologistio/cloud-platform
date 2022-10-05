@@ -1,13 +1,13 @@
 variable "logging_bucket" {
   description = "S3 bucket for AWS logs"
   type        = string
-  default     = "orgname-org-root-aws-logs"
+  default     = "ologist-org-root-aws-logs"
 }
 
 variable "org_email_alias" {
   description = "Email alias for AWS email"
   type        = string
-  default     = "orgname-infra"
+  default     = "ologist-infra"
 }
 
 variable "org_email_domain" {
@@ -19,7 +19,7 @@ variable "org_email_domain" {
 variable "org_name" {
   description = "AWS Organization name"
   type        = string
-  default     = "orgname"
+  default     = "ologist"
 }
 
 variable "region" {
