@@ -69,11 +69,13 @@ runs:
     run: terraform plan -input=false -var-file=tfvars/${{ inputs.environment }}.tfvars -no-color -out=tfplan && terraform show -no-color tfplan
 
   - name: Reformat Plan
+    shell: bash
     run: |
       echo '${{ steps.plan.outputs.stdout || steps.plan.outputs.stderr }}' \
       | sed -E 's/^([[:space:]]+)([-+])/\2\1/g' > plan.txt
 
   - name: Put Plan in Env Var
+    shell: bash
     run: |
       PLAN=$(cat plan.txt)
       echo "PLAN<<EOF" >> $GITHUB_ENV
@@ -84,7 +86,7 @@ runs:
     uses: mshick/add-pr-comment@v1
     with:
       allow-repeats: true
-      repo-token: ${{ secrets.GITHUB_TOKEN }}
+      repo-token: ${{github.token}}
       repo-token-user-login: 'github-actions[bot]'
       message: |
         <details open>
