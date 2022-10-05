@@ -66,13 +66,8 @@ runs:
       TF_WORKSPACE: default
     shell: bash
     continue-on-error: true
-    run: terraform plan -lock=false -input=false -var-file=tfvars/${{ inputs.environment }}.tfvars -no-color -out=tfplan && terraform show -no-color tfplan | sed -E 's/^([[:space:]]+)([-+])/\2\1/g' > plan.txt
-
-  - name: Reformat Plan
-    working-directory: ./terraform/${{ inputs.workspace }}
-    id: rfmtplan
-    shell: bash
     run: |
+      terraform plan -lock=false -input=false -var-file=tfvars/${{ inputs.environment }}.tfvars -no-color -out=tfplan
       terraform show -no-color tfplan | sed -E 's/^([[:space:]]+)([-+])/\2\1/g'
 
   - name: Post Plan to GitHub PR
@@ -86,5 +81,5 @@ runs:
         <summary>${{ inputs.workspace }}/${{ inputs.environment }} plan</summary>
         <br>
         ```diff
-        ${{ steps.rfmtplan.outputs.stdout || steps.rfmtplan.outputs.stderr }}
+        ${{ steps.plan.outputs.stdout || steps.plan.outputs.stderr }}
         ```
