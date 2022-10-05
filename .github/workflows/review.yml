@@ -6,12 +6,11 @@ on:
       - main
 
 jobs:
-  terraform_plan:
-    name: Terraform Plans
+  plan_org_root:
+    name: Terraform Plan / AWS Org Root
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-
     - name: AWS Org Root
       uses: ./.github/actions/terraform-plan
       with:
@@ -21,19 +20,33 @@ jobs:
         aws_access_key: ${{ secrets.AWS_ORG_ROOT__AWS_ACCESS_KEY }}
         aws_secret_key: ${{ secrets.AWS_ORG_ROOT__AWS_SECRET_KEY }}
 
-    # - name: AWS Infra (Global)
-    #   uses: ./.github/actions/terraform-plan
-    #   with:
-    #     account: ${{ secrets.aws_infra__aws_account_id}}
-    #     workspace: ologist-aws-infra/global
-    #     environment: root
+  # plan_infra:
+  #   name: Terraform Plan / AWS Infra (Global)
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: AWS Infra (Global)
+  #     uses: ./.github/actions/terraform-plan
+  #     with:
+  #       account: ${{ secrets.AWS_INFRA__AWS_ACCOUNT_ID}}
+  #       workspace: ologist-aws-infra/global
+  #       environment: root
+  #       aws_access_key: ${{ secrets.AWS_INFRA__AWS_ACCESS_KEY }}
+  #       aws_secret_key: ${{ secrets.AWS_INFRA__AWS_SECRET_KEY }}
 
-    # - name: AWS ID (Global)
-    #   uses: ./.github/actions/terraform-plan
-    #   with:
-    #     account: ${{ secrets.aws_id__aws_account_id}}
-    #     workspace: ologist-aws-id/global
-    #     environment: root
+  # plan_id:
+  #   name: Terraform Plan / AWS ID (Global)
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: AWS ID (Global)
+  #     uses: ./.github/actions/terraform-plan
+  #     with:
+  #       account: ${{ secrets.AWS_ID__AWS_ACCOUNT_ID}}
+  #       workspace: ologist-aws-id/global
+  #       environment: root
+  #       aws_access_key: ${{ secrets.AWS_ID__AWS_ACCESS_KEY }}
+  #       aws_secret_key: ${{ secrets.AWS_ID__AWS_SECRET_KEY }}
 
   terraform_infracost:
     name: Cost Estimate
