@@ -77,9 +77,10 @@ runs:
       repo-token: ${{github.token}}
       repo-token-user-login: 'github-actions[bot]'
       message: |
-        <details open>
+        <details>
         <summary>${{ inputs.workspace }}/${{ inputs.environment }} plan</summary>
         <br>
         ```diff
         ${{ steps.plan.outputs.stdout || steps.plan.outputs.stderr }}
         ```
+        </details>
