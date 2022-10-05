@@ -79,7 +79,7 @@ runs:
         ### Terraform Plans
 
         <details>
-        <summary>${{ inputs.workspace }}/${{ inputs.environment }}</summary>
+        <summary><strong>${{ inputs.workspace }}/${{ inputs.environment }}<strong></summary>
 
         ```diff
         ${{ steps.plan.outputs.stdout || steps.plan.outputs.stderr }}
