@@ -21,7 +21,8 @@ module "logs" {
     aws_organizations_organization.main.accounts[*].id
   )
 
-  s3_bucket_name = var.logging_bucket
+  versioning_status = "Suspended"
+  s3_bucket_name    = var.logging_bucket
 }
 
 #
