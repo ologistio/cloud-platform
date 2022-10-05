@@ -82,7 +82,7 @@ runs:
         <summary><strong>${{ inputs.workspace }}/${{ inputs.environment }}<strong></summary>
 
         ```diff
-        ${{ steps.plan.outputs.stdout || steps.plan.outputs.stderr }}
+        ${{ steps.plan.outputs.stderr }}
         ```
 
         </details>
