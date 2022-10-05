@@ -67,8 +67,7 @@ runs:
     shell: bash
     continue-on-error: true
     run: |
-      terraform plan -lock=false -input=false -var-file=tfvars/${{ inputs.environment }}.tfvars -no-color -out=tfplan
-      terraform show -no-color tfplan | sed -E 's/^([[:space:]]+)([-+])/\2\1/g'
+      terraform plan -lock=false -input=false -var-file=tfvars/${{ inputs.environment }}.tfvars -no-color | sed -E 's/^([[:space:]]+)([-+])/\2\1/g'
 
   - name: Post Plan to GitHub PR
     uses: mshick/add-pr-comment@v1
@@ -77,7 +76,13 @@ runs:
       repo-token: ${{github.token}}
       repo-token-user-login: 'github-actions[bot]'
       message: |
-        ###${{ inputs.workspace }}/${{ inputs.environment }} plan</summary>
+        ### Terraform Plans
+
+        <details>
+        <summary>${{ inputs.workspace }}/${{ inputs.environment }}</summary>
+
         ```diff
         ${{ steps.plan.outputs.stdout || steps.plan.outputs.stderr }}
         ```
+
+        </details>
