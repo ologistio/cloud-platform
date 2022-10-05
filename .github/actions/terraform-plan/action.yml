@@ -66,21 +66,13 @@ runs:
       TF_WORKSPACE: default
     shell: bash
     continue-on-error: true
-    run: terraform plan -input=false -var-file=tfvars/${{ inputs.environment }}.tfvars -no-color -out=tfplan && terraform show -no-color tfplan
+    run: terraform plan -input=false -var-file=tfvars/${{ inputs.environment }}.tfvars -no-color -out=tfplan && terraform show -no-color tfplan | sed -E 's/^([[:space:]]+)([-+])/\2\1/g' > plan.txt
 
   - name: Reformat Plan
+    id: rfmtplan
     shell: bash
     run: |
-      echo '${{ steps.plan.outputs.stdout || steps.plan.outputs.stderr }}' \
-      | sed -E 's/^([[:space:]]+)([-+])/\2\1/g' > plan.txt
-
-  - name: Put Plan in Env Var
-    shell: bash
-    run: |
-      PLAN=$(cat plan.txt)
-      echo "PLAN<<EOF" >> $GITHUB_ENV
-      echo "$PLAN" >> $GITHUB_ENV
-      echo "EOF" >> $GITHUB_ENV
+      terraform show -no-color tfplan | sed -E 's/^([[:space:]]+)([-+])/\2\1/g'
 
   - name: Post Plan to GitHub PR
     uses: mshick/add-pr-comment@v1
@@ -93,5 +85,5 @@ runs:
         <summary>${{ inputs.workspace }}/${{ inputs.environment }} plan</summary>
         <br>
         ```diff
-        ${{ env.PLAN }}
+        ${{ steps.rfmtplan.outputs.stdout || steps.rfmtplan.outputs.stderr }}
         ```
