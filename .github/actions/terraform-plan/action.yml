@@ -57,15 +57,14 @@ runs:
     continue-on-error: false
 
   - name: Plan Terraform
+    working-directory: ./terraform/${{ inputs.workspace }}
     id: plan
     continue-on-error: true
     shell: bash
     env:
       TF_WORKSPACE: default
     run: |
-      cd ./terraform/${{ inputs.workspace }}
-      terraform plan -input=false -var-file=tfvars/${{ inputs.environment }}.tfvars -no-color -out=tfplan \
-      && terraform show -no-color tfplan
+      terraform plan -input=false -var-file=tfvars/${{ inputs.environment }}.tfvars
 
   # # Sed is taking all lines that begin with one or more spaces followed by a `+` or `-`.
   # # It stores the amount of spaces in `\1` and the +/- in `\2`.
