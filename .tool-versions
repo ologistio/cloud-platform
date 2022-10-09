@@ -4,3 +4,4 @@ tflint 0.41.0
 checkov 2.1.255
 infracost 0.10.12
 terraform-docs 0.16.0
+act 0.2.32
