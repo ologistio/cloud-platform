@@ -33,17 +33,62 @@ resource "aws_organizations_organizational_unit" "suspended" {
   parent_id = aws_organizations_organization.main.roots[0].id
 }
 
-# The org-scp module lets us add some common SCPs to our organization;
-# see the README at https://github.com/trussworks/terraform-aws-org-scp
-module "org_scps" {
-  source  = "trussworks/org-scp/aws"
-  version = "~> 1.6.0"
+module "aws_ou_scp_main" {
+  source = "trussworks/ou-scp/aws"
+  target = aws_organizations_organizational_unit.main
 
-  deny_root_account_target_ids     = [aws_organizations_organizational_unit.main.id]
-  deny_leaving_orgs_target_ids     = [aws_organizations_organizational_unit.main.id]
-  require_s3_encryption_target_ids = [aws_organizations_organizational_unit.main.id]
+  # don't allow all accounts to be able to leave the org
+  deny_leaving_orgs = true
+  # # applies to accounts that are not managing IAM users
+  # deny_creating_iam_users       = true
+  # # don't allow deleting KMS keys
+  # deny_deleting_kms_keys        = true
+  # # don't allow deleting Route53 zones
+  # deny_deleting_route53_zones   = true
+  # # don't allow deleting CloudWatch logs
+  # deny_deleting_cloudwatch_logs = true
+  # don't allow access to the root user
+  deny_root_account = true
 
-  deny_all_access_target_ids = [aws_organizations_organizational_unit.suspended.id]
+  # protect_s3_buckets            = true
+  # # protect terraform statefile bucket
+  # protect_s3_bucket_resources   = [
+  #   "arn:aws:s3:::prod-terraform-state-us-west-2",
+  #   "arn:aws:s3:::prod-terraform-state-us-west-2/*"
+  # ]
+
+  # # don't allow public access to bucket
+  # deny_s3_buckets_public_access = true
+  # deny_s3_bucket_public_access_resources = [
+  #   "arn:aws:s3:::log-delivery-august-2020"
+  # ]
+
+  # protect_iam_roles             = true
+  # # - protect OrganizationAccountAccessRole
+  # protect_iam_role_resources     = [
+  #   "arn:aws:iam::*:role/OrganizationAccountAccessRole"
+  # ]
+
+  # # restrict region-specific operations to us-west-2
+  # limit_regions                 = true
+  # # - restrict region-specific operations to us-west-2
+  # allowed_regions               = ["us-west-2"]
+
+  # require s3 objects be encrypted
+  require_s3_encryption = true
+
+  # SCP policy tags
+  tags = {
+    managed_by = "terraform"
+  }
+}
+
+module "aws_ou_scp_suspended" {
+  source = "trussworks/ou-scp/aws"
+  target = aws_organizations_organizational_unit.suspended
+
+  # don't allow any access at all
+  deny_all = true
 }
 
 #
