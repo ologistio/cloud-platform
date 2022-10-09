@@ -40,9 +40,9 @@ output "accounts" {
 }
 
 output "prefix" {
-  output = local.local_prefix
+  value = local.local_prefix
 }
 
 output "global_prefix" {
-  output = local.global_prefix
+  value = local.global_prefix
 }
