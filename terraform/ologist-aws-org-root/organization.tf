@@ -35,7 +35,7 @@ resource "aws_organizations_organizational_unit" "suspended" {
 
 module "aws_ou_scp_main" {
   source = "trussworks/ou-scp/aws"
-  target = aws_organizations_organizational_unit.main.id
+  target = aws_organizations_organizational_unit.main
 
   # don't allow all accounts to be able to leave the org
   deny_leaving_orgs = true
