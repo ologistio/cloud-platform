@@ -24,8 +24,7 @@ resource "aws_iam_user" "admins" {
 
 locals {
   admin_users = [
-    "alice.org-root",
-    "bob.org-root",
+    "josh.finch.org-root",
   ]
 }
 
