@@ -1,0 +1,72 @@
+name: Apply
+description: "Create a Terraform Apply"
+inputs:
+   workspace:
+     required: true
+     description: "The directory containing the Terraform code to apply"
+   environment:
+     required: true
+     description: "The environment tfvar file to use for the apply"
+   aws_access_key:
+     description: "AWS Access Key"
+     required: true
+   aws_secret_key:
+     description: "AWS Secret Key"
+     required: true
+   region:
+     required: false
+     default: "eu-west-1"
+     description: "The region to run this apply against"
+runs:
+  using: "composite"
+  steps:
+  - name: Checkout
+    uses: actions/checkout@v3
+
+  - name: Setup Terraform
+    uses: hashicorp/setup-terraform@v1
+    with:
+      terraform_version: 1.3.1
+
+  - name: Terraform version
+    working-directory: ./terraform/${{ inputs.workspace }}
+    id: version
+    shell: bash
+    run: terraform --version
+    continue-on-error: false
+
+  - name: Terraform fmt
+    working-directory: ./terraform/${{ inputs.workspace }}
+    id: fmt
+    shell: bash
+    run: terraform fmt -recursive -check -diff
+    continue-on-error: false
+
+  - name: Configure AWS credentials
+    uses: aws-actions/configure-aws-credentials@v1
+    with:
+      aws-access-key-id: ${{ inputs.aws_access_key }}
+      aws-secret-access-key: ${{ inputs.aws_secret_key }}
+      aws-region: ${{ inputs.region }}
+
+  - name: Terraform init
+    working-directory: ./terraform/${{ inputs.workspace }}
+    id: init
+    shell: bash
+    run: terraform init -backend-config=tfvars/${{ inputs.environment }}.backend.tfvars
+    continue-on-error: false
+
+  - name: Apply Terraform
+    working-directory: ./terraform/${{ inputs.workspace }}
+    id: apply
+    env:
+      TF_WORKSPACE: default
+    run: terraform apply -input=false -auto-approve -var-file=tfvars/${{ inputs.environment }}.tfvars
+    continue-on-error: false
+
+  - name: Plan Terraform
+    working-directory: ./terraform/${{ inputs.workspace }}
+    id: plan
+    env:
+      TF_WORKSPACE: default
+    run: terraform plan -input=false -var-file=tfvars/${{ inputs.environment }}.tfvars

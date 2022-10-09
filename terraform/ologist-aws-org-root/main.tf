@@ -21,7 +21,8 @@ module "logs" {
     aws_organizations_organization.main.accounts[*].id
   )
 
-  s3_bucket_name = var.logging_bucket
+  versioning_status = "Suspended"
+  s3_bucket_name    = var.logging_bucket
 }
 
 #
@@ -65,12 +66,12 @@ module "config" {
 
 # AWS best practice is that the GuardDuty admin account is not the org-root
 # account, but one that is reserved for infra or security use. In our
-# example here, that's the orgname-infra account. All other GuardDuty
+# example here, that's the ologist-infra account. All other GuardDuty
 # configuration is done in that account. See
-# orgname-infra/admin-global/guardduty.tf for more information.
+# ologist-infra/admin-global/guardduty.tf for more information.
 
 resource "aws_guardduty_organization_admin_account" "main" {
   depends_on = [aws_organizations_organization.main]
 
-  admin_account_id = aws_organizations_account.orgname_infra.id
+  admin_account_id = aws_organizations_account.ologist_infra.id
 }

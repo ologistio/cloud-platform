@@ -1,4 +1,4 @@
-# orgname-org-root Account Setup
+# ologist-org-root Account Setup
 
 The `org-root` account in an AWS Organization is unique because it is
 only meant to manage Organization configuration and AWS Accounts. No
@@ -12,10 +12,10 @@ Firstly, When running `aws-vault`, you may be prompted to enter your
 keychain (laptop) password with the option to choose "Allow" or
 "Always Allow". Choose "Always Allow".
 
-1. Log in to AWS for the appropriate account (`orgname-org-root`)
+1. Log in to AWS for the appropriate account (`ologist-org-root`)
 1. If you haven't already, setup your MFA device.
 1. Generate access keys for your IAM user and configure the
-   `orgname-org-root` profile using the following commands in your
+   `ologist-org-root` profile using the following commands in your
    terminal:
 
    ```bash

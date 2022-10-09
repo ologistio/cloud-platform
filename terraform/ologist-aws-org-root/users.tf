@@ -24,8 +24,7 @@ resource "aws_iam_user" "admins" {
 
 locals {
   admin_users = [
-    "alice.org-root",
-    "bob.org-root",
+    "josh.finch.org-root",
   ]
 }
 
@@ -115,5 +114,5 @@ module "billing_role_access" {
   version = "~> 3.0.0"
 
   iam_role_name     = "billing"
-  source_account_id = aws_organizations_account.orgname_id.id
+  source_account_id = aws_organizations_account.ologist_id.id
 }
