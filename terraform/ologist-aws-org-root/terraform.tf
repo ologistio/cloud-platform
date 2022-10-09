@@ -5,8 +5,4 @@ terraform {
     acl    = "private"
     region = "eu-west-1"
   }
-
-  default_tags {
-    tags = module.shared.tags
-  }
 }

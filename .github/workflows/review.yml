@@ -21,6 +21,7 @@ jobs:
 
   plan_infra:
     name: Terraform Plan / AWS Infra / Global
+    needs: plan_org_root
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -35,6 +36,9 @@ jobs:
 
   # plan_id:
   #   name: Terraform Plan / AWS ID (Global)
+  #   needs:
+  #   - plan_org_root
+  #   - plan_infra
   #   runs-on: ubuntu-latest
   #   steps:
   #   - uses: actions/checkout@v2
