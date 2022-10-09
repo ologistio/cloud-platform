@@ -33,7 +33,7 @@ resource "aws_organizations_organizational_unit" "suspended" {
   parent_id = aws_organizations_organization.main.roots[0].id
 }
 
-module "github_terraform_aws_ou_scp" {
+module "aws_ou_scp_main" {
   source = "trussworks/ou-scp/aws"
   target = aws_organizations_organizational_unit.main.id
 
@@ -83,7 +83,7 @@ module "github_terraform_aws_ou_scp" {
   }
 }
 
-module "github_terraform_aws_ou_scp" {
+module "aws_ou_scp_suspended" {
   source = "trussworks/ou-scp/aws"
   target = aws_organizations_organizational_unit.suspended
 
