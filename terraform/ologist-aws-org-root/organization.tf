@@ -12,13 +12,48 @@ resource "aws_organizations_organization" "main" {
 }
 
 #
+# Root Account
+#
+
+# resource "aws_account_alternate_contact" "billing" {
+
+#   alternate_contact_type = "BILLING"
+
+#   name          = "Example"
+#   title         = "Example"
+#   email_address = "test@example.com"
+#   phone_number  = "+1234567890"
+# }
+
+# resource "aws_account_alternate_contact" "operations" {
+
+#   alternate_contact_type = "OPERATIONS"
+
+#   name          = "Example"
+#   title         = "Example"
+#   email_address = "test@example.com"
+#   phone_number  = "+1234567890"
+# }
+
+# resource "aws_account_alternate_contact" "security" {
+
+#   alternate_contact_type = "SECURITY"
+
+#   name          = "Example"
+#   title         = "Example"
+#   email_address = "test@example.com"
+#   phone_number  = "+1234567890"
+# }
+
+
+#
 # Primary organizations OU
 #
 
 # This OU will contain all our useful accounts and allows us to implement
 # organization-wide policies easily.
 resource "aws_organizations_organizational_unit" "main" {
-  name      = var.org_name
+  name      = module.shared.org
   parent_id = aws_organizations_organization.main.roots[0].id
 }
 
@@ -96,8 +131,8 @@ module "aws_ou_scp_suspended" {
 #
 
 resource "aws_organizations_account" "ologist_id" {
-  name      = format("%s-id", var.org_name)
-  email     = format("%s+id@%s", var.org_email_alias, var.org_email_domain)
+  name      = module.shared.accounts.aws.id.name
+  email     = module.shared.accounts.aws.id.email
   parent_id = aws_organizations_organizational_unit.main.id
 
   # We allow IAM users to access billing from the id account so that we
@@ -111,8 +146,8 @@ resource "aws_organizations_account" "ologist_id" {
 }
 
 resource "aws_organizations_account" "ologist_infra" {
-  name      = format("%s-infra", var.org_name)
-  email     = format("%s+infra@%s", var.org_email_alias, var.org_email_domain)
+  name      = module.shared.accounts.aws.infra.name
+  email     = module.shared.accounts.aws.infra.email
   parent_id = aws_organizations_organizational_unit.main.id
 
   iam_user_access_to_billing = "DENY"

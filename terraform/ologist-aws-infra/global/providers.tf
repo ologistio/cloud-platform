@@ -1,5 +1,5 @@
 provider "aws" {
-  region = var.region
+  region = var.loc.region
 }
 
 # This is a special provider we use for Route53, because that service

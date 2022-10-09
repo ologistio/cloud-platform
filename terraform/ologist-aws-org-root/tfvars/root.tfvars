@@ -1,5 +1,14 @@
-logging_bucket   = "ologist-aws-org-root-logs"
-org_email_alias  = "cloud-platform+aws-org-root"
-org_email_domain = "ologist.io"
-org_name         = "ologist"
-region           = "eu-west-1"
+id = {
+  group               = "Engineering"
+  cost_centre         = "0000"
+  core_infrastructure = "true"
+  application         = "cloud-platform"
+  component           = "aws-org-root"
+  stack               = null
+}
+
+loc = {
+  environment = "root"
+  region      = "eu-west-1"
+  zones       = ["euw1-az1", "euw1-az2"]
+}
