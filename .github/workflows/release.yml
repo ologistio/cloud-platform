@@ -6,15 +6,14 @@ on:
       - main
 
 jobs:
-  plan_org_root:
-    name: Terraform Plan / AWS Org Root
+  apply_org_root:
+    name: Terraform Apply / AWS Org Root
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Terraform Plan
-      uses: ./.github/actions/terraform-plan
+    - name: Terraform Apply
+      uses: ./.github/actions/terraform-apply
       with:
-        account: ${{ secrets.AWS_ORG_ROOT__AWS_ACCOUNT_ID }}
         workspace: ologist-aws-org-root
         environment: root
         aws_access_key: ${{ secrets.AWS_ORG_ROOT__AWS_ACCESS_KEY }}
