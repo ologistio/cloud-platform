@@ -46,13 +46,3 @@ jobs:
   #       environment: root
   #       aws_access_key: ${{ secrets.AWS_ID__AWS_ACCESS_KEY }}
   #       aws_secret_key: ${{ secrets.AWS_ID__AWS_SECRET_KEY }}
-
-  terraform_infracost:
-    name: Cost Estimate
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Infracost
-      uses: ./.github/actions/terraform-infracost
-      with:
-          api_key: ${{ secrets.INFRACOST_API_KEY }}

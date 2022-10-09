@@ -59,6 +59,7 @@ runs:
   - name: Apply Terraform
     working-directory: ./terraform/${{ inputs.workspace }}
     id: apply
+    shell: bash
     env:
       TF_WORKSPACE: default
     run: terraform apply -input=false -auto-approve -var-file=tfvars/${{ inputs.environment }}.tfvars
@@ -67,6 +68,7 @@ runs:
   - name: Plan Terraform
     working-directory: ./terraform/${{ inputs.workspace }}
     id: plan
+    shell: bash
     env:
       TF_WORKSPACE: default
     run: terraform plan -input=false -var-file=tfvars/${{ inputs.environment }}.tfvars
