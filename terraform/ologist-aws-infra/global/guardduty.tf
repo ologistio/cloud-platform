@@ -11,7 +11,7 @@
 # the GuardDuty admin account; other accounts will get detectors created
 # automatically when we add them as members later.
 
-resource "aws_guardduty_detector" "main_uswest2" {
+resource "aws_guardduty_detector" "main_euwest1" {
   enable = true
 }
 
@@ -28,9 +28,9 @@ resource "aws_guardduty_detector" "main_useast1" {
 # as members, but accounts we created prior to setting up GuardDuty for
 # the organization will need to be added manually.
 
-resource "aws_guardduty_organization_configuration" "main_uswest2" {
+resource "aws_guardduty_organization_configuration" "main_euwest1" {
   auto_enable = true
-  detector_id = aws_guardduty_detector.main_uswest2.id
+  detector_id = aws_guardduty_detector.main_euwest1.id
 }
 
 resource "aws_guardduty_organization_configuration" "main_useast1" {
@@ -45,13 +45,13 @@ resource "aws_guardduty_organization_configuration" "main_useast1" {
 # infrequent enough that you could send them to PagerDuty without adding
 # too much of a burden on your on-call team.
 
-module "guardduty_notifications_uswest2" {
+module "guardduty_notifications_euwest1" {
   source  = "trussworks/guardduty-notifications/aws"
   version = "~> 5.0.0"
 
   pagerduty_notifications = false
 
-  sns_topic_slack = aws_sns_topic.notify_slack_uswest2
+  sns_topic_slack = aws_sns_topic.notify_slack_euwest1
 }
 
 module "guardduty_notifications_useast1" {
@@ -81,9 +81,9 @@ module "guardduty_notifications_useast1" {
 # remove them as members (you can confirm that with the AWS commands).
 # See https://github.com/terraform-providers/terraform-provider-aws/issues/13906
 
-# resource "aws_guardduty_member" "orgname_org_root_uswest2" {
+# resource "aws_guardduty_member" "orgname_org_root_euwest1" {
 #   account_id                 = var.account_id_org_root
-#   detector_id                = aws_guardduty_detector.main_uswest2
+#   detector_id                = aws_guardduty_detector.main_euwest1
 #   email                      = var.email_org_root
 #   invite                     = false
 #   disable_email_notification = true
@@ -98,9 +98,9 @@ module "guardduty_notifications_useast1" {
 #   disable_email_notification = true
 # }
 
-# resource "aws_guardduty_member" "orgname_id_uswest2" {
+# resource "aws_guardduty_member" "orgname_id_euwest1" {
 #   account_id                 = var.account_id_id
-#   detector_id                = aws_guardduty_detector.main_uswest2
+#   detector_id                = aws_guardduty_detector.main_euwest1
 #   email                      = var.email_id
 #   invite                     = false
 #   disable_email_notification = true

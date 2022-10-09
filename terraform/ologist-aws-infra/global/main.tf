@@ -11,8 +11,8 @@ module "logs" {
   default_allow = false
   allow_config  = true
 
-  region         = var.region
-  s3_bucket_name = var.logging_bucket
+  region         = var.loc.region
+  s3_bucket_name = "${module.shared.global_prefix}-aws-logs"
 }
 
 #
@@ -23,7 +23,7 @@ module "config" {
   source  = "trussworks/config/aws"
   version = "~> 4.0"
 
-  config_name        = format("%s-config-%s", data.aws_iam_account_alias.current.account_alias, var.region)
+  config_name        = format("%s-config-%s", data.aws_iam_account_alias.current.account_alias, var.loc.region)
   config_logs_bucket = module.logs.aws_logs_bucket
 
   aggregate_organization = true
@@ -41,7 +41,7 @@ module "infra_role" {
   version = "3.0.1"
 
   iam_role_name     = "infra"
-  source_account_id = var.account_id_id
+  source_account_id = module.shared.accounts.aws-id.id
 }
 
 resource "aws_iam_role_policy_attachment" "infra_role_policy" {

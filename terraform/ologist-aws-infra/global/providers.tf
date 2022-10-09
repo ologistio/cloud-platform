@@ -1,5 +1,9 @@
 provider "aws" {
-  region = var.region
+  region = var.loc.region
+
+  default_tags {
+    tags = module.shared.tags
+  }
 }
 
 # This is a special provider we use for Route53, because that service
@@ -8,6 +12,10 @@ provider "aws" {
 provider "aws" {
   alias  = "us-east-1"
   region = "us-east-1"
+
+  default_tags {
+    tags = module.shared_useast1.tags
+  }
 }
 
 provider "template" {

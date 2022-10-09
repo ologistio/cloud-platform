@@ -22,7 +22,7 @@ module "logs" {
   )
 
   versioning_status = "Suspended"
-  s3_bucket_name    = var.logging_bucket
+  s3_bucket_name    = "${module.shared.global_prefix}-aws-logs"
 }
 
 #
@@ -44,7 +44,7 @@ module "config" {
   source  = "trussworks/config/aws"
   version = "~> 4.0"
 
-  config_name        = format("%s-config-%s", data.aws_iam_account_alias.current.account_alias, var.region)
+  config_name        = format("%s-config-%s", data.aws_iam_account_alias.current.account_alias, var.loc.region)
   config_logs_bucket = module.logs.aws_logs_bucket
 
   aggregate_organization = true

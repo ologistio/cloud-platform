@@ -3,7 +3,7 @@
 # don't want to leave it in code anywhere.
 
 data "aws_ssm_parameter" "slack_webhook_url" {
-  name = "/slack/webhook/url/orgname-infra"
+  name = "/${var.id.application}/${var.id.component}/${var.id.stack}/slack_webhook_url"
 }
 
 #
@@ -65,7 +65,7 @@ data "aws_iam_policy_document" "notify_slack_topic_policy_useast1" {
   }
 }
 
-data "aws_iam_policy_document" "notify_slack_topic_policy_uswest2" {
+data "aws_iam_policy_document" "notify_slack_topic_policy_euwest1" {
 
   statement {
     sid = "__default_statement_ID"
@@ -97,7 +97,7 @@ data "aws_iam_policy_document" "notify_slack_topic_policy_uswest2" {
     }
 
     resources = [
-      aws_sns_topic.notify_slack_uswest2.arn
+      aws_sns_topic.notify_slack_euwest1.arn
     ]
   }
 
@@ -111,7 +111,7 @@ data "aws_iam_policy_document" "notify_slack_topic_policy_uswest2" {
     }
 
     actions   = ["SNS:Publish"]
-    resources = [aws_sns_topic.notify_slack_uswest2.arn]
+    resources = [aws_sns_topic.notify_slack_euwest1.arn]
   }
 }
 
@@ -130,10 +130,10 @@ resource "aws_sns_topic_policy" "notify_slack_useast1" {
   policy = data.aws_iam_policy_document.notify_slack_topic_policy_useast1.json
 }
 
-resource "aws_sns_topic_policy" "notify_slack_uswest2" {
-  arn = aws_sns_topic.notify_slack_uswest2.arn
+resource "aws_sns_topic_policy" "notify_slack_euwest1" {
+  arn = aws_sns_topic.notify_slack_euwest1.arn
 
-  policy = data.aws_iam_policy_document.notify_slack_topic_policy_uswest2.json
+  policy = data.aws_iam_policy_document.notify_slack_topic_policy_euwest1.json
 }
 
 # 2019-01-16 (dynamike) - There's a bug in the notify-slack Terraform module that
@@ -146,7 +146,7 @@ resource "aws_sns_topic" "notify_slack_useast1" {
   kms_master_key_id = "alias/aws/sns"
 }
 
-resource "aws_sns_topic" "notify_slack_uswest2" {
+resource "aws_sns_topic" "notify_slack_euwest1" {
   name              = "notify-slack"
   kms_master_key_id = "alias/aws/sns"
 }
@@ -172,19 +172,19 @@ module "notify_slack_useast1" {
   sns_topic_name       = aws_sns_topic.notify_slack_useast1.name
 
   slack_webhook_url = data.aws_ssm_parameter.slack_webhook_url.value
-  slack_channel     = "orgname-infra"
-  slack_username    = "aws-org-alerts"
+  slack_channel     = "${var.id.component}-alerts"
+  slack_username    = module.shared.slackbot_username
 }
 
-module "notify_slack_uswest2" {
+module "notify_slack_euwest1" {
   source  = "terraform-aws-modules/notify-slack/aws"
   version = "~> 5.0.0"
 
-  lambda_function_name = "notify_slack_uswest2"
+  lambda_function_name = "notify_slack_euwest1"
   create_sns_topic     = false
-  sns_topic_name       = aws_sns_topic.notify_slack_uswest2.name
+  sns_topic_name       = aws_sns_topic.notify_slack_euwest1.name
 
   slack_webhook_url = data.aws_ssm_parameter.slack_webhook_url.value
-  slack_channel     = "orgname-infra"
-  slack_username    = "aws-org-alerts"
+  slack_channel     = "${var.id.component}-alerts"
+  slack_username    = module.shared.slackbot_username
 }
